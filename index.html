@@ -220,7 +220,8 @@
     width:100%; height:100%; object-fit:contain; display:block;
     transition:transform .32s cubic-bezier(.22,.8,.36,1), opacity .32s ease;
   }
-  @media (prefers-reduced-motion:reduce){ .gallery img{transition:none;} }
+  .gallery video{width:100%; height:100%; object-fit:contain; display:block; background:#000; transition:transform .32s cubic-bezier(.22,.8,.36,1), opacity .32s ease;}
+  @media (prefers-reduced-motion:reduce){ .gallery img, .gallery video{transition:none;} }
   .gallery-nav{
     position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
     background:rgba(0,0,0,.5); color:#fff; border:none; display:flex; align-items:center; justify-content:center;
@@ -401,6 +402,7 @@
       <button class="modal-close" id="modal-close" aria-label="Закрыть">✕</button>
       <div class="gallery" id="modal-gallery">
         <img id="modal-gallery-img" src="" alt="">
+        <video id="modal-gallery-video" controls playsinline preload="metadata" hidden></video>
         <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Предыдущее фото">‹</button>
         <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Следующее фото">›</button>
         <span class="gallery-counter" id="gallery-counter"></span>
@@ -483,6 +485,7 @@
           <div class="field"><label for="pf-full">Полное описание (абзацы - каждый с новой строки)</label><textarea id="pf-full" style="min-height:100px;"></textarea></div>
           <div class="field"><label for="pf-features">Особенности (каждая с новой строки)</label><textarea id="pf-features" style="min-height:90px;"></textarea></div>
           <div class="field"><label for="pf-images">Фото проекта (по ссылке/пути на строку, первая = обложка карточки)</label><textarea id="pf-images" style="min-height:70px;" placeholder="images/project/01.webp"></textarea></div>
+          <div class="field"><label for="pf-video">Демо-видео (путь или ссылка на .mp4, необязательно)</label><input id="pf-video" placeholder="images/project/demo.mp4"></div>
           <div class="field"><label for="pf-tags">Технологии (через запятую)</label><input id="pf-tags" placeholder="React, Node.js, PostgreSQL"></div>
           <div class="field-row">
             <div class="field"><label for="pf-link">Ссылка на демо</label><input id="pf-link" placeholder="https://"></div>
@@ -525,7 +528,7 @@
   </div>
 </div>
 
-<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, боты и приложения","tagline":"Делаю сайты, Telegram-боты и приложения с нуля - без конструкторов и шаблонов, под задачу клиента.","bio":"Делаю сайты под ключ - от лендингов до сложных проектов с личным кабинетом и каталогом. Все сайты самописные: чистый код под задачу, админ-панель пишу с нуля - под ваши процессы, с удобным управлением контентом и заказами. Также делаю Telegram-ботов и мини-приложения для Telegram, включая ботов-парсеров, мобильные приложения под iOS и Android, десктопные программы и решения на Python под задачу. Работаю и по готовому макету, и с собственным дизайном - под премиальные и бюджетные задачи. Схема простая и безопасная для клиента: сначала договариваемся о задаче, я выполняю работу и показываю готовый результат в демо - без передачи файлов, - и только после оплаты отдаю исходники.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Frontend":["React","TypeScript","Next.js","Tailwind CSS"],"Backend":["Node.js","Python","PostgreSQL","REST/GraphQL"],"Боты и приложения":["Telegram-боты","Mini Apps для Telegram","iOS / Android","Desktop-приложения","Python-решения под задачу"],"DevOps / инструменты":["Docker","Git","CI/CD","Linux"]}},"projects":[{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}]}</script>
+<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, боты и приложения","tagline":"Делаю сайты, Telegram-боты и приложения с нуля - без конструкторов и шаблонов, под задачу клиента.","bio":"Делаю сайты под ключ - от лендингов до сложных проектов с личным кабинетом и каталогом. Все сайты самописные: чистый код под задачу, админ-панель пишу с нуля - под ваши процессы, с удобным управлением контентом и заказами. Также делаю Telegram-ботов и мини-приложения для Telegram, включая ботов-парсеров, мобильные приложения под iOS и Android, десктопные программы и решения на Python под задачу. Работаю и по готовому макету, и с собственным дизайном - под премиальные и бюджетные задачи. Схема простая и безопасная для клиента: сначала договариваемся о задаче, я выполняю работу и показываю готовый результат в демо - без передачи файлов, - и только после оплаты отдаю исходники.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Frontend":["React","TypeScript","Next.js","Tailwind CSS"],"Backend":["Node.js","Python","PostgreSQL","REST/GraphQL"],"Боты и приложения":["Telegram-боты","Mini Apps для Telegram","iOS / Android","Desktop-приложения","Python-решения под задачу"],"DevOps / инструменты":["Docker","Git","CI/CD","Linux"]}},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}]}</script>
 
 <script>
 (function(){
@@ -610,7 +613,7 @@
             <h3>${escapeHtml(proj.title)}</h3>
             ${proj.tagline ? `<p class="card-tagline">${escapeHtml(proj.tagline)}</p>` : ''}
             <p class="card-desc">${escapeHtml(proj.description)}</p>
-            ${images.length ? `<p class="card-more">📷 ${images.length} фото - открыть подробнее</p>` : ''}
+            ${images.length ? `<p class="card-more">📷 ${images.length} фото${proj.video ? ' и видео' : ''} - открыть подробнее</p>` : ''}
             <div class="card-tags">${(proj.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
             <div class="card-links">
               ${proj.link ? `<a href="${escapeHtml(proj.link)}" target="_blank" rel="noopener">${escapeHtml(proj.linkLabel||'Демо')} ↗</a>` : ''}
@@ -641,9 +644,10 @@
 
   /* ---------- project modal ---------- */
   const preloadedImages = new Set();
+  const isVideoSrc = u => /\.(mp4|webm)$/i.test(u || '');
   function preloadImages(urls){
     urls.forEach(u=>{
-      if(preloadedImages.has(u)) return;
+      if(isVideoSrc(u) || preloadedImages.has(u)) return;
       preloadedImages.add(u);
       const img = new Image();
       img.src = u;
@@ -657,12 +661,15 @@
   const galleryPrev = document.getElementById('gallery-prev');
   const galleryNext = document.getElementById('gallery-next');
   let modalImages = [];
+  let modalPoster = '';
+  const modalVideo = document.getElementById('modal-gallery-video');
   let modalIndex = 0;
 
   function openProjectModal(id){
     const proj = (state.projects||[]).find(p=>p.id===id);
     if(!proj) return;
-    modalImages = proj.images || [];
+    modalImages = (proj.video ? [proj.video] : []).concat(proj.images || []);
+    modalPoster = (proj.images || [])[0] || '';
     modalIndex = 0;
     preloadImages(modalImages);
 
@@ -685,6 +692,7 @@
   }
 
   function closeProjectModal(){
+    modalVideo.pause();
     modalOverlay.classList.remove('open');
     document.body.style.overflow = '';
   }
@@ -692,7 +700,7 @@
   const reduceMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
 
   function paintGalleryChrome(){
-    galleryCounter.textContent = (modalIndex+1) + ' / ' + modalImages.length;
+    galleryCounter.textContent = (isVideoSrc(modalImages[modalIndex]) ? '▶ видео · ' : '') + (modalIndex+1) + ' / ' + modalImages.length;
     const showNav = modalImages.length > 1;
     galleryPrev.hidden = !showNav; galleryNext.hidden = !showNav;
     galleryDots.innerHTML = showNav ? modalImages.map((_,i)=>`<span class="gallery-dot${i===modalIndex?' active':''}" data-i="${i}"></span>`).join('') : '';
@@ -705,29 +713,39 @@
     });
   }
 
+  function showSlide(src, alt){
+    if(isVideoSrc(src)){
+      modalImg.hidden = true;
+      modalVideo.hidden = false;
+      modalVideo.poster = modalPoster;
+      modalVideo.src = src;
+    } else {
+      modalVideo.pause();
+      modalVideo.hidden = true;
+      modalImg.hidden = false;
+      modalImg.src = src;
+      modalImg.alt = alt;
+    }
+  }
+
   function renderGallery(direction){
     const src = modalImages[modalIndex];
     const alt = document.getElementById('modal-title').textContent + ' - фото ' + (modalIndex+1);
+    const layers = [modalImg, modalVideo];
 
     if(!direction || reduceMotionQuery.matches){
-      modalImg.src = src;
-      modalImg.alt = alt;
+      showSlide(src, alt);
       paintGalleryChrome();
       return;
     }
 
     // slide + fade the outgoing frame out, then swap and slide the new one in
-    modalImg.style.transform = `translateX(${direction * -28}px)`;
-    modalImg.style.opacity = '0';
+    layers.forEach(el=>{ el.style.transform = `translateX(${direction * -28}px)`; el.style.opacity = '0'; });
     setTimeout(()=>{
-      modalImg.src = src;
-      modalImg.alt = alt;
-      modalImg.style.transition = 'none';
-      modalImg.style.transform = `translateX(${direction * 28}px)`;
+      layers.forEach(el=>{ el.style.transition = 'none'; el.style.transform = `translateX(${direction * 28}px)`; });
+      showSlide(src, alt);
       void modalImg.offsetWidth; // force reflow before re-enabling transition
-      modalImg.style.transition = '';
-      modalImg.style.transform = 'translateX(0)';
-      modalImg.style.opacity = '1';
+      layers.forEach(el=>{ el.style.transition = ''; el.style.transform = 'translateX(0)'; el.style.opacity = '1'; });
       paintGalleryChrome();
     }, 220);
   }
@@ -879,6 +897,7 @@
     document.getElementById('pf-full').value = proj ? (proj.fullDescription||[]).join('\n') : '';
     document.getElementById('pf-features').value = proj ? (proj.features||[]).join('\n') : '';
     document.getElementById('pf-images').value = proj ? (proj.images||[]).join('\n') : '';
+    document.getElementById('pf-video').value = proj ? (proj.video || '') : '';
     document.getElementById('pf-tags').value = proj ? (proj.tags||[]).join(', ') : '';
     document.getElementById('pf-link').value = proj ? (proj.link || '') : '';
     document.getElementById('pf-repo').value = proj ? (proj.repo || '') : '';
@@ -904,6 +923,7 @@
       fullDescription: lines(document.getElementById('pf-full').value),
       features: lines(document.getElementById('pf-features').value),
       images: lines(document.getElementById('pf-images').value),
+      video: document.getElementById('pf-video').value.trim(),
       tags: document.getElementById('pf-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
       link: document.getElementById('pf-link').value.trim(),
       repo: document.getElementById('pf-repo').value.trim(),
