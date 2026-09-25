@@ -149,6 +149,16 @@
   .stat b{font-family:"Inter",sans-serif; font-weight:700; font-size:15.5px; line-height:1.35;}
   .stat span{color:var(--text-dim); font-size:13px; line-height:1.5;}
 
+  .bio p{margin:0 0 14px;}
+  .bio p:last-child{margin-bottom:0;}
+  .stat-row{grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:56px;}
+  .stack-any{border:1px solid var(--border); background:var(--surface); border-radius:14px; padding:20px 22px; border-left:3px solid var(--accent-2);}
+  .stack-any b{display:block; font-size:clamp(28px,4vw,38px); font-weight:800; line-height:1.1; letter-spacing:-.02em;}
+  .stack-any p{margin:8px 0 0; color:var(--text-dim); font-size:14px; line-height:1.6;}
+  .limits h3{font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); font-weight:500; margin-bottom:10px;}
+  .limits ul{margin:0; padding:0; list-style:none; display:grid; gap:8px;}
+  .limits li{color:var(--text-dim); font-size:13px; line-height:1.55; padding-left:16px; position:relative;}
+  .limits li::before{content:"-"; position:absolute; left:0; color:var(--accent);}
   .skills-col{display:grid; gap:22px;}
   .skill-group h3{font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); font-weight:500; margin-bottom:12px;}
   .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
@@ -340,7 +350,7 @@
     <a class="logo" href="#home"><span class="logo-dot"></span><span id="nav-name">foy4ik</span></a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#about">Обо мне</a></li>
-      <li><a href="#skills">Навыки</a></li>
+      <li><a href="#skills">Стек</a></li>
       <li><a href="#projects">Проекты</a></li>
       <li><a href="#contact">Контакты</a></li>
     </ul>
@@ -370,17 +380,20 @@
     <div class="wrap about-grid">
       <div class="reveal">
         <p class="eyebrow">Обо мне</p>
-        <h2 style="font-size:clamp(24px,3vw,32px);">Немного контекста</h2>
-        <p class="bio" id="about-bio" style="margin-top:16px;"></p>
-        <div class="stat-list">
-          <div class="stat"><b id="stat-projects">0 проектов в портфолио</b><span>включая выполненные заказы</span></div>
-          <div class="stat"><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов и шаблонов</span></div>
-          <div class="stat"><b>Оплата после демонстрации</b><span>показываю готовую работу, файлы передаю только после оплаты</span></div>
-        </div>
+        <h2 style="font-size:clamp(24px,3vw,32px);">Вайбкодер, и я этого не скрываю</h2>
+        <div class="bio" id="about-bio" style="margin-top:16px;"></div>
       </div>
       <div class="reveal" id="skills" style="scroll-margin-top:90px;">
-        <p class="eyebrow">Навыки</p>
+        <p class="eyebrow">Стек</p>
         <div class="skills-col" id="skills-grid"></div>
+      </div>
+    </div>
+    <div class="wrap reveal">
+      <div class="stat-list stat-row">
+        <div class="stat"><b id="stat-projects">0 проектов в портфолио</b><span>включая выполненные заказы</span></div>
+        <div class="stat"><b>Claude Code в каждом проекте</b><span>весь код в портфолио написан с его помощью</span></div>
+        <div class="stat"><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов и шаблонов</span></div>
+        <div class="stat"><b>Оплата после демонстрации</b><span>показываю готовую работу, файлы передаю только после оплаты</span></div>
       </div>
     </div>
   </section>
@@ -456,7 +469,7 @@
 <footer>
   <div class="wrap">
     <span id="footer-name">© <span id="footer-year"></span> foy4ik</span>
-    <span>Сделано с вниманием к деталям</span>
+    <span>Написано с помощью Claude Code</span>
   </div>
 </footer>
 
@@ -504,7 +517,7 @@
         <div class="field"><label for="prof-name">Имя / ник</label><input id="prof-name"></div>
         <div class="field"><label for="prof-role">Роль</label><input id="prof-role"></div>
         <div class="field"><label for="prof-tagline">Заголовок на главной</label><input id="prof-tagline"></div>
-        <div class="field"><label for="prof-bio">О себе</label><textarea id="prof-bio"></textarea></div>
+        <div class="field"><label for="prof-bio">О себе (абзацы через пустую строку)</label><textarea id="prof-bio"></textarea></div>
         <div class="field-row">
           <div class="field"><label for="prof-location">Локация</label><input id="prof-location"></div>
           <div class="field"><label for="prof-available">Статус</label><input id="prof-available" placeholder="Открыт для проектов"></div>
@@ -515,10 +528,11 @@
           <div class="field"><label for="prof-github">GitHub (ссылка)</label><input id="prof-github"></div>
           <div class="field"><label for="prof-kwork">Kwork (ссылка)</label><input id="prof-kwork"></div>
         </div>
-        <div class="field"><label for="prof-skills-frontend">Frontend-навыки</label><input id="prof-skills-frontend"></div>
-        <div class="field"><label for="prof-skills-backend">Backend-навыки</label><input id="prof-skills-backend"></div>
-        <div class="field"><label for="prof-skills-apps">Боты и приложения</label><input id="prof-skills-apps"></div>
-        <div class="field"><label for="prof-skills-tools">DevOps / инструменты</label><input id="prof-skills-tools"></div>
+        <div class="field"><label for="prof-chip">Плашка в шапке</label><input id="prof-chip"></div>
+        <div class="field"><label for="prof-stack-title">Стек: заголовок</label><input id="prof-stack-title"></div>
+        <div class="field"><label for="prof-stack-text">Стек: пояснение</label><textarea id="prof-stack-text"></textarea></div>
+        <div class="field"><label for="prof-skills-used">Уже делал на (через запятую)</label><input id="prof-skills-used"></div>
+        <div class="field"><label for="prof-limits">Нюансы (каждый с новой строки)</label><textarea id="prof-limits"></textarea></div>
         <button class="btn btn-primary btn-sm" id="save-profile-btn">Сохранить профиль</button>
       </div>
     </div>
@@ -529,7 +543,7 @@
   </div>
 </div>
 
-<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, боты и приложения","tagline":"Делаю сайты, Telegram-боты и приложения с нуля - без конструкторов и шаблонов, под задачу клиента.","bio":"Делаю сайты под ключ - от лендингов до сложных проектов с личным кабинетом и каталогом. Все сайты самописные: чистый код под задачу, админ-панель пишу с нуля - под ваши процессы, с удобным управлением контентом и заказами. Также делаю Telegram-ботов и мини-приложения для Telegram, включая ботов-парсеров, мобильные приложения под iOS и Android, десктопные программы и решения на Python под задачу. Работаю и по готовому макету, и с собственным дизайном - под премиальные и бюджетные задачи. Схема простая и безопасная для клиента: сначала договариваемся о задаче, я выполняю работу и показываю готовый результат в демо - без передачи файлов, - и только после оплаты отдаю исходники.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Frontend":["React","TypeScript","Next.js","Tailwind CSS"],"Backend":["Node.js","Python","PostgreSQL","REST/GraphQL"],"Боты и приложения":["Telegram-боты","Mini Apps для Telegram","iOS / Android","Desktop-приложения","Python-решения под задачу"],"DevOps / инструменты":["Docker","Git","CI/CD","Linux"]}},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","download":"https://github.com/foy4ik/kairo#download","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}]}</script>
+<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Вайбкодер: сайты, боты и приложения","tagline":"Делаю сайты, Telegram-боты и приложения на Claude Code - без конструкторов и шаблонов, под задачу клиента.","heroChip":"🤖 Всё написано с помощью Claude Code","stackTitle":"Любой","stackText":"Код пишет Claude Code, поэтому я не привязан к одному языку или фреймворку: беру тот стек, который лучше подходит задаче.","limits":["Публикация в App Store и Google Play требует аккаунтов разработчика, а для iOS ещё и Mac","Закрытые SDK, особое оборудование и системы без доступа к среде - только если доступ будет у меня"],"bio":"Я вайбкодер, и не скрываю этого: все мои проекты, включая те, что на этом сайте, полностью написаны с помощью Claude Code. Сейчас такое время, что ИИ часто делает лучше, чем высококвалифицированные специалисты, если он в умелых руках. Моя задача - точно поставить задачу, продумать логику и довести результат до рабочего состояния.\n\nДелаю сайты под ключ (от лендингов до проектов с личным кабинетом и каталогом), админ-панели под ваши процессы, Telegram-ботов и мини-приложения, мобильные приложения под iOS и Android, десктопные программы и Python-решения под задачу. Работаю и по готовому макету, и со своим дизайном.\n\nСхема простая и безопасная для клиента: договариваемся о задаче, я делаю работу и показываю готовый результат в демо, без передачи файлов, и только после оплаты отдаю исходники.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Уже делал на":["Next.js","React","TypeScript","Tailwind CSS","Node.js","Python","Rust + Tauri","PostgreSQL","SQLite","Prisma","Telegram Bot API","Vercel","GitHub Actions"]}},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","download":"https://github.com/foy4ik/kairo#download","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}]}</script>
 
 <script>
 (function(){
@@ -555,9 +569,9 @@
     document.getElementById('hero-name').textContent = p.name;
     document.getElementById('hero-tagline').textContent = p.tagline;
     document.getElementById('hero-location').textContent = '📍 ' + p.location;
-    document.getElementById('hero-skills-count').textContent = '🛠️ ' + p.role;
+    document.getElementById('hero-skills-count').textContent = p.heroChip || ('🛠️ ' + p.role);
     document.getElementById('status-text').textContent = p.available;
-    document.getElementById('about-bio').textContent = p.bio;
+    document.getElementById('about-bio').innerHTML = (p.bio || '').split(/\n\s*\n/).map(t=>`<p>${escapeHtml(t.trim())}</p>`).join('');
     document.getElementById('footer-name').innerHTML = '© <span id="footer-year"></span> ' + escapeHtml(p.name);
     document.getElementById('footer-year').textContent = new Date().getFullYear();
 
@@ -568,12 +582,23 @@
     document.getElementById('contact-kwork').href = p.kwork || '#';
 
     const skillsGrid = document.getElementById('skills-grid');
-    skillsGrid.innerHTML = Object.entries(p.skills || {}).map(([group, items]) => `
+    const stackBlock = p.stackTitle ? `
+      <div class="stack-any">
+        <b>${escapeHtml(p.stackTitle)}</b>
+        <p>${escapeHtml(p.stackText || '')}</p>
+      </div>` : '';
+    const groups = Object.entries(p.skills || {}).map(([group, items]) => `
       <div class="skill-group">
         <h3>${escapeHtml(group)}</h3>
         <div class="chip-row">${(items||[]).map(s=>`<span class="chip">${escapeHtml(s)}</span>`).join('')}</div>
       </div>
     `).join('');
+    const limits = (p.limits||[]).length ? `
+      <div class="limits">
+        <h3>Есть нюансы</h3>
+        <ul>${p.limits.map(l=>`<li>${escapeHtml(l)}</li>`).join('')}</ul>
+      </div>` : '';
+    skillsGrid.innerHTML = stackBlock + groups + limits;
   }
 
   function pluralProjects(n){
@@ -961,10 +986,11 @@
     document.getElementById('prof-telegram').value = p.telegram || '';
     document.getElementById('prof-github').value = p.github || '';
     document.getElementById('prof-kwork').value = p.kwork || '';
-    document.getElementById('prof-skills-frontend').value = (p.skills?.['Frontend']||[]).join(', ');
-    document.getElementById('prof-skills-backend').value = (p.skills?.['Backend']||[]).join(', ');
-    document.getElementById('prof-skills-apps').value = (p.skills?.['Боты и приложения']||[]).join(', ');
-    document.getElementById('prof-skills-tools').value = (p.skills?.['DevOps / инструменты']||[]).join(', ');
+    document.getElementById('prof-chip').value = p.heroChip || '';
+    document.getElementById('prof-stack-title').value = p.stackTitle || '';
+    document.getElementById('prof-stack-text').value = p.stackText || '';
+    document.getElementById('prof-skills-used').value = (p.skills?.['Уже делал на']||[]).join(', ');
+    document.getElementById('prof-limits').value = (p.limits||[]).join('\n');
   }
 
   document.getElementById('save-profile-btn').addEventListener('click', ()=>{
@@ -981,11 +1007,12 @@
       telegram: document.getElementById('prof-telegram').value.trim(),
       github: document.getElementById('prof-github').value.trim(),
       kwork: document.getElementById('prof-kwork').value.trim(),
+      heroChip: document.getElementById('prof-chip').value.trim(),
+      stackTitle: document.getElementById('prof-stack-title').value.trim(),
+      stackText: document.getElementById('prof-stack-text').value.trim(),
+      limits: document.getElementById('prof-limits').value.split('\n').map(x=>x.trim()).filter(Boolean),
       skills: {
-        'Frontend': split(document.getElementById('prof-skills-frontend').value),
-        'Backend': split(document.getElementById('prof-skills-backend').value),
-        'Боты и приложения': split(document.getElementById('prof-skills-apps').value),
-        'DevOps / инструменты': split(document.getElementById('prof-skills-tools').value),
+        'Уже делал на': split(document.getElementById('prof-skills-used').value),
       }
     };
     renderProfile();
