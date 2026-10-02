@@ -47,8 +47,8 @@
   .card p{color:var(--text-dim); font-size:14px; margin:10px 0 0;}
   .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
   .field label{font-family:"JetBrains Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-dim);}
-  .field input, .field textarea{background:var(--bg-elevated); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; width:100%;}
-  .field input:focus, .field textarea:focus{outline:2px solid rgba(var(--accent-rgb),.4); border-color:var(--accent);}
+  .field input, .field textarea, .field select{background:var(--bg-elevated); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; width:100%;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid rgba(var(--accent-rgb),.4); border-color:var(--accent);}
   .field textarea{resize:vertical; min-height:72px;}
   .field-row{display:flex; gap:10px; flex-wrap:wrap;}
   .field-row .field{flex:1; min-width:200px;}
@@ -117,6 +117,7 @@
   <section id="panel-view" hidden>
     <div class="tabs">
       <button class="tab active" data-tab="projects">Проекты</button>
+      <button class="tab" data-tab="services">Услуги</button>
       <button class="tab" data-tab="profile">Профиль</button>
     </div>
 
@@ -145,6 +146,31 @@
         <div style="display:flex; gap:10px;">
           <button type="submit" class="btn btn-primary btn-sm">Сохранить проект</button>
           <button type="button" class="btn btn-ghost btn-sm" id="pf-cancel">Отмена</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="tab-services" hidden>
+      <div id="service-list"></div>
+      <button class="btn btn-ghost btn-sm" id="add-service-btn" style="width:100%;">+ Добавить услугу</button>
+
+      <form id="service-form" hidden>
+        <input type="hidden" id="sv-id">
+        <div class="field-row">
+          <div class="field" style="flex:0 0 120px; min-width:100px;"><label for="sv-emoji">Эмодзи</label><input id="sv-emoji" maxlength="8" placeholder="🚀"></div>
+          <div class="field"><label for="sv-title">Название</label><input id="sv-title" required></div>
+        </div>
+        <div class="field"><label for="sv-audience">Для кого</label><input id="sv-audience" placeholder="салоны, барберы, мастера"></div>
+        <div class="field"><label for="sv-includes">Что входит (каждый пункт с новой строки, обычно 3-5 пунктов)</label><textarea id="sv-includes" style="min-height:120px;"></textarea></div>
+        <div class="field-row">
+          <div class="field"><label for="sv-term">Срок</label><input id="sv-term" placeholder="от 2 дней"></div>
+          <div class="field"><label for="sv-price">Цена</label><input id="sv-price" placeholder="от 2 500 ₽"></div>
+        </div>
+        <div class="field"><label for="sv-note">Примечание (мелким текстом, необязательно)</label><textarea id="sv-note"></textarea></div>
+        <div class="field"><label for="sv-project">Пример работы (проект из портфолио, необязательно)</label><select id="sv-project"></select></div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn btn-primary btn-sm">Сохранить услугу</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="sv-cancel">Отмена</button>
         </div>
       </form>
     </div>
@@ -247,12 +273,13 @@
   }
   async function enter(){
     const site = await readSite();
+    baseline = JSON.stringify(site.data);
     state = site.data;
     state.projects = state.projects || [];
-    baseline = JSON.stringify(state);
+    state.services = Array.isArray(state.services) ? state.services : [];
     setDirty(false);
     $('login-view').hidden = true; $('panel-view').hidden = false; $('bar').hidden = false; $('logout').hidden = false;
-    renderList(); fillProfile(); setStatus('');
+    renderList(); renderServiceList(); fillProfile(); setStatus('');
   }
   $('login-form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -289,8 +316,8 @@
   document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    $('tab-projects').hidden = tab.dataset.tab !== 'projects';
-    $('tab-profile').hidden = tab.dataset.tab !== 'profile';
+    ['projects', 'services', 'profile'].forEach(n => { $('tab-' + n).hidden = tab.dataset.tab !== n; });
+    if(tab.dataset.tab === 'services') renderServiceList();
   }));
 
   /* ---------- projects ---------- */
@@ -364,6 +391,74 @@
     setDirty(true); closeForm(); renderList();
   });
 
+  /* ---------- services ---------- */
+  const sForm = $('service-form'), sAdd = $('add-service-btn');
+  function renderServiceList(){
+    const ss = state.services;
+    const names = Object.fromEntries(state.projects.map(p => [p.id, p.title]));
+    $('service-list').innerHTML = ss.length ? ss.map((x, i) => `
+      <div class="row" data-id="${esc(x.id)}">
+        <div class="info"><b>${esc(((x.emoji || '') + ' ' + x.title).trim())}</b><span>${esc([x.price, x.term].filter(Boolean).join(' / '))}${x.projectId && names[x.projectId] ? ' / пример: ' + esc(names[x.projectId]) : ''}</span></div>
+        <div class="actions">
+          <button type="button" class="icon-btn" data-act="up" title="Выше" ${i === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" class="icon-btn" data-act="down" title="Ниже" ${i === ss.length - 1 ? 'disabled' : ''}>▼</button>
+          <button type="button" class="icon-btn" data-act="edit" title="Редактировать">✎</button>
+          <button type="button" class="icon-btn danger" data-act="del" title="Удалить">✕</button>
+        </div>
+      </div>`).join('') : '<p style="color:var(--text-dim); font-size:14px;">Услуг пока нет.</p>';
+  }
+  $('service-list').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]'); if(!btn) return;
+    const id = btn.closest('.row').dataset.id;
+    const i = state.services.findIndex(x => x.id === id); if(i < 0) return;
+    const act = btn.dataset.act;
+    if(act === 'edit') openServiceForm(state.services[i]);
+    else if(act === 'del'){
+      if(confirm('Удалить услугу «' + state.services[i].title + '»?')){ state.services.splice(i, 1); setDirty(true); renderServiceList(); }
+    } else {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if(j >= 0 && j < state.services.length){ [state.services[i], state.services[j]] = [state.services[j], state.services[i]]; setDirty(true); renderServiceList(); }
+    }
+  });
+  function openServiceForm(x){
+    sForm.hidden = false; sAdd.hidden = true;
+    $('sv-id').value = x ? x.id : '';
+    $('sv-emoji').value = x ? x.emoji || '' : '';
+    $('sv-title').value = x ? x.title || '' : '';
+    $('sv-audience').value = x ? x.audience || '' : '';
+    $('sv-includes').value = x ? (x.includes || []).join('\n') : '';
+    $('sv-term').value = x ? x.term || '' : '';
+    $('sv-price').value = x ? x.price || '' : '';
+    $('sv-note').value = x ? x.note || '' : '';
+    const sel = $('sv-project');
+    sel.innerHTML = '<option value="">Не привязывать</option>' +
+      state.projects.map(p => `<option value="${esc(p.id)}">${esc(p.title)}</option>`).join('');
+    sel.value = x && state.projects.some(p => p.id === x.projectId) ? x.projectId : '';
+    sForm.scrollIntoView({behavior:'smooth', block:'start'});
+    $('sv-title').focus({preventScroll:true});
+  }
+  function closeServiceForm(){ sForm.hidden = true; sAdd.hidden = false; sForm.reset(); }
+  sAdd.addEventListener('click', () => openServiceForm(null));
+  $('sv-cancel').addEventListener('click', closeServiceForm);
+  sForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('sv-id').value;
+    const data = {
+      emoji: $('sv-emoji').value.trim(), title: $('sv-title').value.trim(), audience: $('sv-audience').value.trim(),
+      includes: lines($('sv-includes').value), term: $('sv-term').value.trim(), price: $('sv-price').value.trim(),
+      note: $('sv-note').value.trim(), projectId: $('sv-project').value,
+    };
+    if(!data.title) return;
+    if(id){
+      const i = state.services.findIndex(x => x.id === id);
+      if(i > -1) state.services[i] = Object.assign({}, state.services[i], data);
+    } else {
+      data.id = 'svc-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      state.services.push(data);
+    }
+    setDirty(true); closeServiceForm(); renderServiceList();
+  });
+
   /* ---------- profile ---------- */
   const P = {name:'prof-name', role:'prof-role', tagline:'prof-tagline', bio:'prof-bio', riskLine:'prof-risk', location:'prof-location',
     available:'prof-available', email:'prof-email', telegram:'prof-telegram', github:'prof-github', kwork:'prof-kwork',
@@ -389,7 +484,7 @@
   /* ---------- publish ---------- */
   function setStatus(msg, kind){ const s = $('status'); s.textContent = msg || ''; s.className = kind || ''; }
   $('publish-btn').addEventListener('click', async () => {
-    if(!form.hidden){ setStatus('Сначала сохраните или отмените открытый проект.', 'err'); return; }
+    if(!form.hidden || !sForm.hidden){ setStatus('Сначала сохраните или отмените открытую форму.', 'err'); return; }
     applyProfile();
     const btn = $('publish-btn'); btn.disabled = true; setStatus('Публикую…');
     try{
