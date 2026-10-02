@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Управление сайтом</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f5f4fa; --bg-elevated:#ffffff; --surface:#ffffff; --surface-2:#f0eef8;
+    --border:#e3e0ee; --text:#151420; --text-dim:#635f72;
+    --accent:#6a3df0; --accent-rgb:106,61,240; --accent-2:#0ea88a;
+    --danger:#d6304a; --shadow:0 20px 60px -20px rgba(20,10,60,.22);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#09080d; --bg-elevated:#121119; --surface:#141319; --surface-2:#1b1a23;
+      --border:#28262f; --text:#eeecf5; --text-dim:#98939f;
+      --accent:#8b6bff; --accent-rgb:139,107,255; --accent-2:#3fe8bd;
+      --danger:#ff6b81; --shadow:0 30px 90px -24px rgba(0,0,0,.65);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:"Inter",system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px; margin:0 auto; padding:24px 20px 140px;}
+  h1,h2{margin:0; font-weight:800; letter-spacing:-.01em;}
+  button{font:inherit; cursor:pointer;}
+  input,textarea{font:inherit;}
+  [hidden]{display:none !important;}
+  a{color:var(--accent);}
+
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:20px; margin-bottom:24px; border-bottom:1px solid var(--border);}
+  .logo{display:flex; align-items:center; gap:10px; font-weight:700;}
+  .logo-dot{width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(var(--accent-rgb),.18);}
+  .top-actions{display:flex; gap:8px;}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:500; padding:12px 20px; border-radius:10px; border:1px solid transparent; text-decoration:none; transition:box-shadow .2s, border-color .2s;}
+  .btn-primary{background:var(--accent); color:#fff;}
+  .btn-primary:hover{box-shadow:0 10px 30px -8px rgba(var(--accent-rgb),.55);}
+  .btn-primary:disabled{opacity:.6; cursor:default; box-shadow:none;}
+  .btn-ghost{border-color:var(--border); background:var(--surface); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--accent);}
+  .btn-sm{padding:8px 14px; font-size:12px; border-radius:8px;}
+
+  .card{border:1px solid var(--border); background:var(--surface); border-radius:16px; padding:28px; box-shadow:var(--shadow);}
+  .card p{color:var(--text-dim); font-size:14px; margin:10px 0 0;}
+  .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
+  .field label{font-family:"JetBrains Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-dim);}
+  .field input, .field textarea{background:var(--bg-elevated); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; width:100%;}
+  .field input:focus, .field textarea:focus{outline:2px solid rgba(var(--accent-rgb),.4); border-color:var(--accent);}
+  .field textarea{resize:vertical; min-height:72px;}
+  .field-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .field-row .field{flex:1; min-width:200px;}
+  .hint{font-size:12px; color:var(--text-dim); margin:-6px 0 14px;}
+  .check{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-dim); margin:4px 0 18px;}
+  details{margin-top:22px; border-top:1px solid var(--border); padding-top:16px; font-size:13.5px; color:var(--text-dim);}
+  summary{cursor:pointer; color:var(--text); font-weight:600;}
+  details ol{margin:12px 0 0; padding-left:20px; display:grid; gap:6px;}
+  code{font-family:"JetBrains Mono",monospace; font-size:12px; background:var(--surface-2); padding:2px 6px; border-radius:5px;}
+
+  .tabs{display:flex; border-bottom:1px solid var(--border); margin-bottom:22px;}
+  .tab{flex:1; padding:12px; text-align:center; font-family:"JetBrains Mono",monospace; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-dim); background:none; border:none; border-bottom:2px solid transparent;}
+  .tab.active{color:var(--accent); border-color:var(--accent);}
+
+  .row{border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px; background:var(--surface);}
+  .row .info{min-width:0;}
+  .row .info b{display:block; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .row .info span{font-size:12px; color:var(--text-dim);}
+  .row .actions{display:flex; gap:6px; flex-shrink:0;}
+  .icon-btn{width:30px; height:30px; border-radius:7px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-dim); display:flex; align-items:center; justify-content:center; font-size:13px;}
+  .icon-btn:hover{color:var(--accent); border-color:var(--accent);}
+  .icon-btn.danger:hover{color:var(--danger); border-color:var(--danger);}
+  #project-form{margin-top:20px; border-top:1px solid var(--border); padding-top:20px;}
+
+  .bar{position:fixed; left:0; right:0; bottom:0; background:var(--bg-elevated); border-top:1px solid var(--border); padding:14px 20px; z-index:10;}
+  .bar-in{max-width:760px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  #status{font-size:13px; color:var(--text-dim); min-height:20px; flex:1; min-width:180px;}
+  #status.err{color:var(--danger);} #status.ok{color:var(--accent-2);}
+  #login-status{font-size:13px; min-height:20px; margin-top:12px; color:var(--text-dim);}
+  #login-status.err{color:var(--danger);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo"><span class="logo-dot"></span>Управление сайтом</div>
+    <div class="top-actions">
+      <a class="btn btn-ghost btn-sm" href="./" target="_blank" rel="noopener">Открыть сайт ↗</a>
+      <button class="btn btn-ghost btn-sm" id="logout" hidden>Выйти</button>
+    </div>
+  </header>
+
+  <section id="login-view">
+    <div class="card">
+      <h1 style="font-size:24px;">Вход</h1>
+      <p>Правки сохраняются прямо в репозиторий сайта, поэтому «паролем» служит ключ доступа GitHub (токен). Без него страница ничего не изменит, даже если её кто-то откроет.</p>
+      <form id="login-form" style="margin-top:22px;">
+        <div class="field"><label for="token">Ключ доступа GitHub</label><input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>
+        <label class="check"><input type="checkbox" id="remember"> Запомнить на этом устройстве</label>
+        <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%;">Войти</button>
+        <div id="login-status" role="status"></div>
+      </form>
+      <details>
+        <summary>Где взять ключ</summary>
+        <ol>
+          <li>Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+          <li>Название любое, срок действия, например, 90 дней.</li>
+          <li><b>Repository access</b>: Only select repositories, выберите <code>foy4ik.github.io</code>.</li>
+          <li><b>Permissions</b> → Repository permissions → <b>Contents: Read and write</b>.</li>
+          <li>Нажмите Generate token и вставьте его сюда. Никому его не передавайте: отозвать можно там же в любой момент.</li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <section id="panel-view" hidden>
+    <div class="tabs">
+      <button class="tab active" data-tab="projects">Проекты</button>
+      <button class="tab" data-tab="profile">Профиль</button>
+    </div>
+
+    <div id="tab-projects">
+      <div id="project-list"></div>
+      <button class="btn btn-ghost btn-sm" id="add-project-btn" style="width:100%;">+ Добавить проект</button>
+
+      <form id="project-form" hidden>
+        <input type="hidden" id="pf-id">
+        <div class="field"><label for="pf-title">Название</label><input id="pf-title" required></div>
+        <div class="field"><label for="pf-tagline">Подзаголовок</label><input id="pf-tagline"></div>
+        <div class="field"><label for="pf-desc">Краткое описание (для карточки)</label><textarea id="pf-desc"></textarea></div>
+        <div class="field"><label for="pf-meta">Тип проекта (в подробностях)</label><input id="pf-meta" placeholder="Портфолио-проект - фронтенд с нуля"></div>
+        <div class="field"><label for="pf-full">Полное описание (каждый абзац с новой строки)</label><textarea id="pf-full" style="min-height:110px;"></textarea></div>
+        <div class="field"><label for="pf-features">Особенности (каждая с новой строки)</label><textarea id="pf-features" style="min-height:100px;"></textarea></div>
+        <div class="field"><label for="pf-images">Фото проекта (путь на строку, первое = обложка)</label><textarea id="pf-images" placeholder="images/project/01.webp"></textarea></div>
+        <p class="hint">Сами файлы картинок нужно положить в папку <code>images/</code> репозитория (это делаю я или вы через git), здесь указывается только путь.</p>
+        <div class="field"><label for="pf-video">Демо-видео (путь к .mp4, необязательно)</label><input id="pf-video" placeholder="images/project/demo.mp4"></div>
+        <div class="field"><label for="pf-tags">Технологии (через запятую)</label><input id="pf-tags" placeholder="React, Node.js, PostgreSQL"></div>
+        <div class="field-row">
+          <div class="field"><label for="pf-link">Ссылка на демо</label><input id="pf-link" placeholder="https://"></div>
+          <div class="field"><label for="pf-repo">Ссылка на код</label><input id="pf-repo" placeholder="https://"></div>
+        </div>
+        <div class="field"><label for="pf-download">Ссылка на скачивание (необязательно)</label><input id="pf-download" placeholder="https://"></div>
+        <div class="field"><label for="pf-badge">Бейдж на карточке (необязательно)</label><input id="pf-badge" placeholder="Реальный заказ / Desktop-приложение"></div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn btn-primary btn-sm">Сохранить проект</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="pf-cancel">Отмена</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="tab-profile" hidden>
+      <div class="field"><label for="prof-name">Имя / ник</label><input id="prof-name"></div>
+      <div class="field"><label for="prof-role">Плашка над заголовком</label><input id="prof-role"></div>
+      <div class="field"><label for="prof-tagline">Подзаголовок на главной</label><input id="prof-tagline"></div>
+      <div class="field"><label for="prof-chip">Плашка в шапке 1</label><input id="prof-chip"></div>
+      <div class="field"><label for="prof-chip2">Плашка в шапке 2</label><input id="prof-chip2"></div>
+      <div class="field-row">
+        <div class="field"><label for="prof-location">Локация</label><input id="prof-location"></div>
+        <div class="field"><label for="prof-available">Статус в меню</label><input id="prof-available"></div>
+      </div>
+      <div class="field"><label for="prof-bio">О себе (абзацы через пустую строку)</label><textarea id="prof-bio" style="min-height:140px;"></textarea></div>
+      <div class="field"><label for="prof-steps">Схема работы (каждый шаг с новой строки)</label><textarea id="prof-steps"></textarea></div>
+      <div class="field"><label for="prof-risk">Строка про риск клиента</label><input id="prof-risk"></div>
+      <div class="field"><label for="prof-stack-title">Стек: заголовок</label><input id="prof-stack-title"></div>
+      <div class="field"><label for="prof-stack-text">Стек: пояснение</label><textarea id="prof-stack-text"></textarea></div>
+      <div class="field"><label for="prof-skills-used">Уже делал на (через запятую)</label><input id="prof-skills-used"></div>
+      <div class="field"><label for="prof-limits">Нюансы (каждый с новой строки)</label><textarea id="prof-limits"></textarea></div>
+      <div class="field"><label for="prof-email">Email</label><input id="prof-email"></div>
+      <div class="field-row">
+        <div class="field"><label for="prof-telegram">Telegram (ссылка)</label><input id="prof-telegram"></div>
+        <div class="field"><label for="prof-github">GitHub (ссылка)</label><input id="prof-github"></div>
+        <div class="field"><label for="prof-kwork">Kwork (ссылка)</label><input id="prof-kwork"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="bar-in">
+    <div id="status" role="status"></div>
+    <button class="btn btn-primary" id="publish-btn">Опубликовать изменения</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const REPO = 'foy4ik/foy4ik.github.io', BRANCH = 'main', FILE = 'index.html';
+  const API = 'https://api.github.com';
+  const STATE_RE = /(<script id="state-data" type="application\/json">)([\s\S]*?)(<\/script>)/;
+  const $ = id => document.getElementById(id);
+
+  let token = '';
+  let state = null;
+  let baseline = '';      // JSON of the data as it was loaded
+  let dirty = false;
+
+  function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function lines(v){ return v.split('\n').map(s=>s.trim()).filter(Boolean); }
+  function csv(v){ return v.split(',').map(s=>s.trim()).filter(Boolean); }
+  function setDirty(v){ dirty = v; }
+  window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+  /* ---------- GitHub API ---------- */
+  async function gh(path, init){
+    let res;
+    try{
+      res = await fetch(API + path, Object.assign({cache:'no-store'}, init, {headers: Object.assign({
+        'Accept':'application/vnd.github+json', 'Authorization':'Bearer ' + token, 'X-GitHub-Api-Version':'2022-11-28'
+      }, (init && init.headers) || {})}));
+    }catch(e){ const err = new Error('network'); err.status = 0; throw err; }
+    if(!res.ok){ const err = new Error('http'); err.status = res.status; throw err; }
+    return res.json();
+  }
+  function explain(err, publishing){
+    const s = err && err.status;
+    if(s === 0) return 'Нет связи с GitHub. Проверьте интернет и попробуйте ещё раз.';
+    if(s === 401) return 'Ключ не подходит или истёк. Создайте новый.';
+    if(s === 403) return 'Нет прав. У ключа должно быть право Contents: Read and write на репозиторий foy4ik.github.io (либо превышен лимит запросов, подождите).';
+    if(s === 404) return 'Репозиторий не найден: ключ выдан не на foy4ik.github.io.';
+    if(s === 409 || s === 422) return 'Файл на сайте уже изменился. Обновите страницу и повторите.';
+    return publishing ? 'Не удалось опубликовать изменения. Попробуйте ещё раз.' : 'Не удалось загрузить сайт. Попробуйте ещё раз.';
+  }
+  function b64ToUtf8(b64){
+    const bin = atob(b64.replace(/\s/g,''));
+    return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+  }
+  function utf8ToB64(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for(let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  async function readSite(){
+    const f = await gh(`/repos/${REPO}/contents/${FILE}?ref=${BRANCH}`);
+    const html = b64ToUtf8(f.content);
+    const m = html.match(STATE_RE);
+    if(!m) throw Object.assign(new Error('no_state'), {status:-1});
+    return {sha: f.sha, html, data: JSON.parse(m[2])};
+  }
+
+  /* ---------- login ---------- */
+  function showLogin(msg){
+    $('panel-view').hidden = true; $('bar').hidden = true; $('logout').hidden = true; $('login-view').hidden = false;
+    const st = $('login-status'); st.textContent = msg || ''; st.className = msg ? 'err' : '';
+  }
+  async function enter(){
+    const site = await readSite();
+    state = site.data;
+    state.projects = state.projects || [];
+    baseline = JSON.stringify(state);
+    setDirty(false);
+    $('login-view').hidden = true; $('panel-view').hidden = false; $('bar').hidden = false; $('logout').hidden = false;
+    renderList(); fillProfile(); setStatus('');
+  }
+  $('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    token = $('token').value.trim();
+    if(!token) return;
+    const st = $('login-status'); st.className = ''; st.textContent = 'Проверяю…';
+    $('login-btn').disabled = true;
+    try{
+      await gh('/repos/' + REPO);
+      (($('remember').checked) ? localStorage : sessionStorage).setItem('gh_token', token);
+      await enter();
+      $('token').value = '';
+    }catch(err){
+      token = '';
+      showLogin(explain(err, false));
+    }finally{ $('login-btn').disabled = false; }
+  });
+  $('logout').addEventListener('click', () => {
+    if(dirty && !confirm('Есть неопубликованные изменения. Выйти без сохранения?')) return;
+    sessionStorage.removeItem('gh_token'); localStorage.removeItem('gh_token');
+    token = ''; state = null; setDirty(false); showLogin('');
+  });
+  (async function autoLogin(){
+    token = sessionStorage.getItem('gh_token') || localStorage.getItem('gh_token') || '';
+    if(!token){ showLogin(''); return; }
+    try{ await enter(); }
+    catch(err){
+      if(err.status === 401){ sessionStorage.removeItem('gh_token'); localStorage.removeItem('gh_token'); token = ''; showLogin('Сохранённый ключ больше не действует. Войдите заново.'); }
+      else { showLogin(explain(err, false)); }
+    }
+  })();
+
+  /* ---------- tabs ---------- */
+  document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    $('tab-projects').hidden = tab.dataset.tab !== 'projects';
+    $('tab-profile').hidden = tab.dataset.tab !== 'profile';
+  }));
+
+  /* ---------- projects ---------- */
+  const form = $('project-form'), addBtn = $('add-project-btn');
+  function renderList(){
+    const ps = state.projects;
+    $('project-list').innerHTML = ps.length ? ps.map((p, i) => `
+      <div class="row" data-id="${esc(p.id)}">
+        <div class="info"><b>${esc(p.title)}</b><span>${esc((p.tags||[]).join(', '))}</span></div>
+        <div class="actions">
+          <button type="button" class="icon-btn" data-act="up" title="Выше" ${i===0?'disabled':''}>▲</button>
+          <button type="button" class="icon-btn" data-act="down" title="Ниже" ${i===ps.length-1?'disabled':''}>▼</button>
+          <button type="button" class="icon-btn" data-act="edit" title="Редактировать">✎</button>
+          <button type="button" class="icon-btn danger" data-act="del" title="Удалить">✕</button>
+        </div>
+      </div>`).join('') : '<p style="color:var(--text-dim); font-size:14px;">Проектов пока нет.</p>';
+  }
+  $('project-list').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]'); if(!btn) return;
+    const id = btn.closest('.row').dataset.id;
+    const i = state.projects.findIndex(p => p.id === id); if(i < 0) return;
+    const act = btn.dataset.act;
+    if(act === 'edit') openForm(state.projects[i]);
+    else if(act === 'del'){
+      if(confirm('Удалить проект «' + state.projects[i].title + '» из портфолио?')){ state.projects.splice(i, 1); setDirty(true); renderList(); }
+    } else {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if(j >= 0 && j < state.projects.length){ [state.projects[i], state.projects[j]] = [state.projects[j], state.projects[i]]; setDirty(true); renderList(); }
+    }
+  });
+  function openForm(p){
+    form.hidden = false; addBtn.hidden = true;
+    $('pf-id').value = p ? p.id : '';
+    $('pf-title').value = p ? p.title : '';
+    $('pf-tagline').value = p ? p.tagline || '' : '';
+    $('pf-desc').value = p ? p.description || '' : '';
+    $('pf-meta').value = p ? p.meta || '' : '';
+    $('pf-full').value = p ? (p.fullDescription||[]).join('\n') : '';
+    $('pf-features').value = p ? (p.features||[]).join('\n') : '';
+    $('pf-images').value = p ? (p.images||[]).join('\n') : '';
+    $('pf-video').value = p ? p.video || '' : '';
+    $('pf-tags').value = p ? (p.tags||[]).join(', ') : '';
+    $('pf-link').value = p ? p.link || '' : '';
+    $('pf-repo').value = p ? p.repo || '' : '';
+    $('pf-download').value = p ? p.download || '' : '';
+    $('pf-badge').value = p ? p.badge || '' : '';
+    form.scrollIntoView({behavior:'smooth', block:'start'});
+    $('pf-title').focus({preventScroll:true});
+  }
+  function closeForm(){ form.hidden = true; addBtn.hidden = false; form.reset(); }
+  addBtn.addEventListener('click', () => openForm(null));
+  $('pf-cancel').addEventListener('click', closeForm);
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('pf-id').value;
+    const data = {
+      title: $('pf-title').value.trim(), tagline: $('pf-tagline').value.trim(), description: $('pf-desc').value.trim(),
+      meta: $('pf-meta').value.trim(), fullDescription: lines($('pf-full').value), features: lines($('pf-features').value),
+      images: lines($('pf-images').value), video: $('pf-video').value.trim(), tags: csv($('pf-tags').value),
+      link: $('pf-link').value.trim(), repo: $('pf-repo').value.trim(), download: $('pf-download').value.trim(), badge: $('pf-badge').value.trim(),
+    };
+    if(!data.title) return;
+    if(id){
+      const i = state.projects.findIndex(p => p.id === id);
+      if(i > -1) state.projects[i] = Object.assign({}, state.projects[i], data);
+    } else {
+      data.id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      data.linkLabel = 'Демо';
+      state.projects.push(data);
+    }
+    setDirty(true); closeForm(); renderList();
+  });
+
+  /* ---------- profile ---------- */
+  const P = {name:'prof-name', role:'prof-role', tagline:'prof-tagline', bio:'prof-bio', riskLine:'prof-risk', location:'prof-location',
+    available:'prof-available', email:'prof-email', telegram:'prof-telegram', github:'prof-github', kwork:'prof-kwork',
+    heroChip:'prof-chip', heroChip2:'prof-chip2', stackTitle:'prof-stack-title', stackText:'prof-stack-text'};
+  function fillProfile(){
+    const p = state.profile || {};
+    Object.entries(P).forEach(([k, id]) => { $(id).value = p[k] || ''; });
+    $('prof-steps').value = (p.steps||[]).join('\n');
+    $('prof-skills-used').value = ((p.skills||{})['Уже делал на']||[]).join(', ');
+    $('prof-limits').value = (p.limits||[]).join('\n');
+  }
+  function applyProfile(){
+    const next = Object.assign({}, state.profile);
+    Object.entries(P).forEach(([k, id]) => { next[k] = $(id).value.trim(); });
+    if(!next.name) next.name = state.profile.name;
+    next.steps = lines($('prof-steps').value);
+    next.limits = lines($('prof-limits').value);
+    next.skills = {'Уже делал на': csv($('prof-skills-used').value)};
+    state.profile = next;
+  }
+  $('tab-profile').addEventListener('input', () => setDirty(true));
+
+  /* ---------- publish ---------- */
+  function setStatus(msg, kind){ const s = $('status'); s.textContent = msg || ''; s.className = kind || ''; }
+  $('publish-btn').addEventListener('click', async () => {
+    if(!form.hidden){ setStatus('Сначала сохраните или отмените открытый проект.', 'err'); return; }
+    applyProfile();
+    const btn = $('publish-btn'); btn.disabled = true; setStatus('Публикую…');
+    try{
+      const latest = await readSite();
+      if(JSON.stringify(latest.data) !== baseline){
+        setStatus('Данные на сайте изменились, пока вы редактировали. Обновите страницу (ваши правки не потеряются, если скопировать их заранее).', 'err'); return;
+      }
+      const json = JSON.stringify(state).replace(/</g, '\\u003c');
+      const updated = latest.html.replace(STATE_RE, (m, a, old, b) => a + json + b);
+      await gh(`/repos/${REPO}/contents/${FILE}`, {method:'PUT', body: JSON.stringify({
+        message: 'Admin: update site content', content: utf8ToB64(updated), sha: latest.sha, branch: BRANCH})});
+      baseline = JSON.stringify(state); setDirty(false);
+      setStatus('Опубликовано. Сайт обновится через 1-2 минуты.', 'ok');
+    }catch(err){
+      setStatus(explain(err, true), 'err');
+    }finally{ btn.disabled = false; }
+  });
+})();
+</script>
+</body>
+</html>

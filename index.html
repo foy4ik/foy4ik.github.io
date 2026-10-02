@@ -295,37 +295,6 @@
     .card{opacity:1;}
   }
 
-  /* admin */
-  #admin-trigger{
-    position:fixed; right:20px; bottom:20px; z-index:80;
-    width:46px; height:46px; border-radius:50%; border:1px solid var(--border);
-    background:var(--surface); color:var(--text-dim); display:flex; align-items:center; justify-content:center;
-    box-shadow:var(--shadow); transition:color .2s, transform .2s, border-color .2s;
-  }
-  #admin-trigger:hover{color:var(--accent); border-color:var(--accent); transform:rotate(28deg);}
-
-  #admin-overlay{
-    position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.42);
-    opacity:0; pointer-events:none; transition:opacity .25s ease;
-  }
-  #admin-overlay.open{opacity:1; pointer-events:auto;}
-  #admin-panel{
-    position:fixed; top:0; right:0; height:100%; width:min(440px,100vw); z-index:101;
-    background:var(--bg-elevated); border-left:1px solid var(--border);
-    transform:translateX(100%); transition:transform .3s ease;
-    display:flex; flex-direction:column;
-  }
-  #admin-overlay.open #admin-panel{transform:translateX(0);}
-  .admin-head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border);}
-  .admin-head h2{font-size:16px;}
-  .admin-close{background:none; border:none; color:var(--text-dim); font-size:20px; line-height:1; padding:4px;}
-  .admin-tabs{display:flex; border-bottom:1px solid var(--border);}
-  .admin-tab{flex:1; padding:12px; text-align:center; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-dim); background:none; border:none; border-bottom:2px solid transparent;}
-  .admin-tab.active{color:var(--accent); border-color:var(--accent);}
-  .admin-body{flex:1; overflow-y:auto; padding:20px 22px;}
-  .admin-foot{padding:16px 22px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:10px;}
-  #admin-status{font-size:12px; color:var(--text-dim); min-height:16px;}
-
   .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
   .field label{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-dim);}
   .field input, .field textarea{
@@ -338,19 +307,6 @@
   .field-row .field{flex:1;}
   .checkbox-field{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-dim); margin-bottom:14px;}
 
-  .admin-project-row{
-    border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:10px;
-    display:flex; justify-content:space-between; align-items:center; gap:10px; background:var(--surface);
-  }
-  .admin-project-row .info{min-width:0;}
-  .admin-project-row .info b{display:block; font-size:13.5px; font-family:"Inter",sans-serif; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .admin-project-row .info span{font-size:11.5px; color:var(--text-dim);}
-  .admin-project-row .actions{display:flex; gap:6px; flex-shrink:0;}
-  .icon-btn{
-    width:28px; height:28px; border-radius:6px; border:1px solid var(--border); background:var(--bg-elevated);
-    color:var(--text-dim); display:flex; align-items:center; justify-content:center; font-size:13px;
-  }
-  .icon-btn:hover{color:var(--accent); border-color:var(--accent);}
   [hidden]{display:none !important;}
 </style>
 
@@ -488,79 +444,6 @@
   </div>
 </footer>
 
-<button id="admin-trigger" title="Управление сайтом" aria-label="Управление сайтом">⚙</button>
-<div id="admin-overlay">
-  <div id="admin-panel" role="dialog" aria-label="Панель управления сайтом">
-    <div class="admin-head">
-      <h2>Управление сайтом</h2>
-      <button class="admin-close" id="admin-close" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="projects">Проекты</button>
-      <button class="admin-tab" data-tab="profile">Профиль</button>
-    </div>
-    <div class="admin-body">
-      <div id="tab-projects">
-        <div id="admin-project-list"></div>
-        <button class="btn btn-ghost btn-sm" id="add-project-btn" style="width:100%; justify-content:center; margin-top:6px;">+ Добавить проект</button>
-
-        <form id="project-form" hidden style="margin-top:18px; border-top:1px solid var(--border); padding-top:16px;">
-          <input type="hidden" id="pf-id">
-          <div class="field"><label for="pf-title">Название</label><input id="pf-title" required></div>
-          <div class="field"><label for="pf-tagline">Подзаголовок</label><input id="pf-tagline"></div>
-          <div class="field"><label for="pf-desc">Краткое описание (для карточки)</label><textarea id="pf-desc"></textarea></div>
-          <div class="field"><label for="pf-meta">Тип проекта (в подробностях)</label><input id="pf-meta" placeholder="Портфолио-проект - фронтенд с нуля"></div>
-          <div class="field"><label for="pf-full">Полное описание (абзацы - каждый с новой строки)</label><textarea id="pf-full" style="min-height:100px;"></textarea></div>
-          <div class="field"><label for="pf-features">Особенности (каждая с новой строки)</label><textarea id="pf-features" style="min-height:90px;"></textarea></div>
-          <div class="field"><label for="pf-images">Фото проекта (по ссылке/пути на строку, первая = обложка карточки)</label><textarea id="pf-images" style="min-height:70px;" placeholder="images/project/01.webp"></textarea></div>
-          <div class="field"><label for="pf-video">Демо-видео (путь или ссылка на .mp4, необязательно)</label><input id="pf-video" placeholder="images/project/demo.mp4"></div>
-          <div class="field"><label for="pf-tags">Технологии (через запятую)</label><input id="pf-tags" placeholder="React, Node.js, PostgreSQL"></div>
-          <div class="field-row">
-            <div class="field"><label for="pf-link">Ссылка на демо</label><input id="pf-link" placeholder="https://"></div>
-            <div class="field"><label for="pf-repo">Ссылка на код</label><input id="pf-repo" placeholder="https://"></div>
-          </div>
-          <div class="field"><label for="pf-download">Ссылка на скачивание (необязательно)</label><input id="pf-download" placeholder="https://"></div>
-          <div class="field"><label for="pf-badge">Бейдж на карточке (необязательно)</label><input id="pf-badge" placeholder="Реальный заказ / Пример проекта"></div>
-          <div style="display:flex; gap:10px;">
-            <button type="submit" class="btn btn-primary btn-sm">Сохранить</button>
-            <button type="button" class="btn btn-ghost btn-sm" id="pf-cancel">Отмена</button>
-          </div>
-        </form>
-      </div>
-
-      <div id="tab-profile" hidden>
-        <div class="field"><label for="prof-name">Имя / ник</label><input id="prof-name"></div>
-        <div class="field"><label for="prof-role">Роль</label><input id="prof-role"></div>
-        <div class="field"><label for="prof-tagline">Заголовок на главной</label><input id="prof-tagline"></div>
-        <div class="field"><label for="prof-bio">О себе (абзацы через пустую строку)</label><textarea id="prof-bio"></textarea></div>
-        <div class="field"><label for="prof-steps">Схема работы (каждый шаг с новой строки)</label><textarea id="prof-steps"></textarea></div>
-        <div class="field"><label for="prof-risk">Строка про риск клиента</label><input id="prof-risk"></div>
-        <div class="field-row">
-          <div class="field"><label for="prof-location">Локация</label><input id="prof-location"></div>
-          <div class="field"><label for="prof-available">Статус</label><input id="prof-available" placeholder="Открыт для проектов"></div>
-        </div>
-        <div class="field"><label for="prof-email">Email</label><input id="prof-email"></div>
-        <div class="field-row">
-          <div class="field"><label for="prof-telegram">Telegram (ссылка)</label><input id="prof-telegram"></div>
-          <div class="field"><label for="prof-github">GitHub (ссылка)</label><input id="prof-github"></div>
-          <div class="field"><label for="prof-kwork">Kwork (ссылка)</label><input id="prof-kwork"></div>
-        </div>
-        <div class="field"><label for="prof-chip">Плашка в шапке 1</label><input id="prof-chip"></div>
-        <div class="field"><label for="prof-chip2">Плашка в шапке 2</label><input id="prof-chip2"></div>
-        <div class="field"><label for="prof-stack-title">Стек: заголовок</label><input id="prof-stack-title"></div>
-        <div class="field"><label for="prof-stack-text">Стек: пояснение</label><textarea id="prof-stack-text"></textarea></div>
-        <div class="field"><label for="prof-skills-used">Уже делал на (через запятую)</label><input id="prof-skills-used"></div>
-        <div class="field"><label for="prof-limits">Нюансы (каждый с новой строки)</label><textarea id="prof-limits"></textarea></div>
-        <button class="btn btn-primary btn-sm" id="save-profile-btn">Сохранить профиль</button>
-      </div>
-    </div>
-    <div class="admin-foot">
-      <div id="admin-status"></div>
-      <button class="btn btn-primary" id="publish-btn" style="justify-content:center;">Опубликовать изменения</button>
-    </div>
-  </div>
-</div>
-
 <script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, Telegram-боты и приложения под ключ","tagline":"Делаю сайты, Telegram-ботов и мини-приложения под задачу вашего бизнеса. Сначала показываю готовую работу - платите, только когда всё устраивает.","heroChip":"💳 Оплата после демонстрации","heroChip2":"⚡ Разработка с ИИ - быстрее и дешевле обычного","stackTitle":"Любой","stackText":"Код пишет Claude Code, поэтому я не привязан к одному языку или фреймворку: беру тот стек, который лучше подходит задаче.","limits":["Закрытые SDK, особое оборудование и системы без доступа к среде - только если доступ будет у меня"],"bio":"Делаю сайты под ключ - от лендинга до каталога с личным кабинетом и админ-панелью, Telegram-ботов и мини-приложения, мобильные приложения под iOS и Android, десктопные программы и Python-решения: парсеры, автоматизацию, интеграции. Работаю по вашему макету или со своим дизайном.\n\nВ разработке использую Claude Code - ИИ-инструмент, который пишет код под моим руководством. Благодаря ему я делаю проекты в разы быстрее, чем при классической разработке, а значит, дешевле для вас. При этом ИИ - только инструмент: разобраться в задаче, продумать логику, проверить каждую функцию и запустить проект - моя работа.","steps":["Обсуждаем задачу, я называю срок и цену.","Делаю проект и показываю его в работе - в демо, без передачи файлов.","Вносим правки, если нужно.","Вы оплачиваете, я передаю исходники и помогаю с запуском."],"riskLine":"Вы ничем не рискуете: если результат не понравится, вы ничего не платите.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Уже делал на":["Next.js","React","TypeScript","Tailwind CSS","Node.js","Python","Rust + Tauri","PostgreSQL","SQLite","Prisma","Telegram Bot API","Vercel","GitHub Actions"]}},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","download":"https://github.com/foy4ik/kairo#download","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}]}</script>
 
 <script>
@@ -637,7 +520,7 @@
     const projects = state.projects || [];
     document.getElementById('stat-projects').textContent = pluralProjects(projects.length);
     if(!projects.length){
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Пока нет проектов - добавьте первый через панель управления (значок ⚙ внизу справа).</div>`;
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Проекты скоро появятся.</div>`;
       return;
     }
     grid.innerHTML = projects.map((proj, i) => {
@@ -867,187 +750,6 @@
     });
   });
 
-  /* ---------- admin: capability ---------- */
-  let artifactApi = null;
-  (async function initCapability(){
-    try{
-      if(window.claude && typeof window.claude.use === 'function'){
-        artifactApi = await window.claude.use('artifact');
-      }
-    }catch(e){ artifactApi = null; }
-  })();
-
-  /* ---------- admin: panel wiring ---------- */
-  const overlay = document.getElementById('admin-overlay');
-  const trigger = document.getElementById('admin-trigger');
-  const closeBtn = document.getElementById('admin-close');
-  trigger.addEventListener('click', ()=>{ openAdmin(); });
-  closeBtn.addEventListener('click', ()=>{ overlay.classList.remove('open'); });
-  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.classList.remove('open'); });
-
-  function openAdmin(){
-    overlay.classList.add('open');
-    renderAdminProjectList();
-    fillProfileForm();
-  }
-
-  document.querySelectorAll('.admin-tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('tab-projects').hidden = tab.dataset.tab !== 'projects';
-      document.getElementById('tab-profile').hidden = tab.dataset.tab !== 'profile';
-    });
-  });
-
-  /* ---------- admin: projects ---------- */
-  const listEl = document.getElementById('admin-project-list');
-  const form = document.getElementById('project-form');
-  const addBtn = document.getElementById('add-project-btn');
-  const cancelBtn = document.getElementById('pf-cancel');
-
-  function renderAdminProjectList(){
-    const projects = state.projects || [];
-    listEl.innerHTML = projects.length ? projects.map(p => `
-      <div class="admin-project-row" data-id="${escapeHtml(p.id)}">
-        <div class="info"><b>${escapeHtml(p.title)}</b><span>${escapeHtml((p.tags||[]).join(', '))}</span></div>
-        <div class="actions">
-          <button class="icon-btn edit-project" title="Редактировать">✎</button>
-          <button class="icon-btn btn-danger delete-project" title="Удалить">✕</button>
-        </div>
-      </div>
-    `).join('') : `<p style="color:var(--text-dim); font-size:13px;">Проектов пока нет.</p>`;
-
-    listEl.querySelectorAll('.edit-project').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const id = e.target.closest('.admin-project-row').dataset.id;
-        openProjectForm(state.projects.find(p=>p.id===id));
-      });
-    });
-    listEl.querySelectorAll('.delete-project').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        const id = e.target.closest('.admin-project-row').dataset.id;
-        if(confirm('Удалить проект из портфолио?')){
-          state.projects = state.projects.filter(p=>p.id!==id);
-          renderAdminProjectList();
-          renderProjects();
-        }
-      });
-    });
-  }
-
-  function openProjectForm(proj){
-    form.hidden = false;
-    addBtn.hidden = true;
-    document.getElementById('pf-id').value = proj ? proj.id : '';
-    document.getElementById('pf-title').value = proj ? proj.title : '';
-    document.getElementById('pf-tagline').value = proj ? proj.tagline || '' : '';
-    document.getElementById('pf-desc').value = proj ? proj.description || '' : '';
-    document.getElementById('pf-meta').value = proj ? proj.meta || '' : '';
-    document.getElementById('pf-full').value = proj ? (proj.fullDescription||[]).join('\n') : '';
-    document.getElementById('pf-features').value = proj ? (proj.features||[]).join('\n') : '';
-    document.getElementById('pf-images').value = proj ? (proj.images||[]).join('\n') : '';
-    document.getElementById('pf-video').value = proj ? (proj.video || '') : '';
-    document.getElementById('pf-tags').value = proj ? (proj.tags||[]).join(', ') : '';
-    document.getElementById('pf-link').value = proj ? (proj.link || '') : '';
-    document.getElementById('pf-repo').value = proj ? (proj.repo || '') : '';
-    document.getElementById('pf-badge').value = proj ? (proj.badge || '') : '';
-    document.getElementById('pf-download').value = proj ? (proj.download || '') : '';
-    document.getElementById('pf-title').focus();
-  }
-  function closeProjectForm(){
-    form.hidden = true; addBtn.hidden = false; form.reset();
-  }
-
-  addBtn.addEventListener('click', ()=> openProjectForm(null));
-  cancelBtn.addEventListener('click', closeProjectForm);
-
-  form.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const id = document.getElementById('pf-id').value;
-    const lines = v => v.split('\n').map(s=>s.trim()).filter(Boolean);
-    const data = {
-      title: document.getElementById('pf-title').value.trim(),
-      tagline: document.getElementById('pf-tagline').value.trim(),
-      description: document.getElementById('pf-desc').value.trim(),
-      meta: document.getElementById('pf-meta').value.trim(),
-      fullDescription: lines(document.getElementById('pf-full').value),
-      features: lines(document.getElementById('pf-features').value),
-      images: lines(document.getElementById('pf-images').value),
-      video: document.getElementById('pf-video').value.trim(),
-      tags: document.getElementById('pf-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
-      link: document.getElementById('pf-link').value.trim(),
-      repo: document.getElementById('pf-repo').value.trim(),
-      badge: document.getElementById('pf-badge').value.trim(),
-      download: document.getElementById('pf-download').value.trim(),
-    };
-    if(!id) data.linkLabel = 'Демо';
-    if(!data.title){ return; }
-    if(id){
-      const idx = state.projects.findIndex(p=>p.id===id);
-      if(idx>-1) state.projects[idx] = {...state.projects[idx], ...data};
-    } else {
-      data.id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-      state.projects = state.projects || [];
-      state.projects.push(data);
-    }
-    closeProjectForm();
-    renderAdminProjectList();
-    renderProjects();
-  });
-
-  /* ---------- admin: profile ---------- */
-  function fillProfileForm(){
-    const p = state.profile;
-    document.getElementById('prof-name').value = p.name || '';
-    document.getElementById('prof-role').value = p.role || '';
-    document.getElementById('prof-tagline').value = p.tagline || '';
-    document.getElementById('prof-bio').value = p.bio || '';
-    document.getElementById('prof-steps').value = (p.steps||[]).join('\n');
-    document.getElementById('prof-risk').value = p.riskLine || '';
-    document.getElementById('prof-location').value = p.location || '';
-    document.getElementById('prof-available').value = p.available || '';
-    document.getElementById('prof-email').value = p.email || '';
-    document.getElementById('prof-telegram').value = p.telegram || '';
-    document.getElementById('prof-github').value = p.github || '';
-    document.getElementById('prof-kwork').value = p.kwork || '';
-    document.getElementById('prof-chip').value = p.heroChip || '';
-    document.getElementById('prof-chip2').value = p.heroChip2 || '';
-    document.getElementById('prof-stack-title').value = p.stackTitle || '';
-    document.getElementById('prof-stack-text').value = p.stackText || '';
-    document.getElementById('prof-skills-used').value = (p.skills?.['Уже делал на']||[]).join(', ');
-    document.getElementById('prof-limits').value = (p.limits||[]).join('\n');
-  }
-
-  document.getElementById('save-profile-btn').addEventListener('click', ()=>{
-    const split = v => v.split(',').map(s=>s.trim()).filter(Boolean);
-    state.profile = {
-      ...state.profile,
-      name: document.getElementById('prof-name').value.trim() || state.profile.name,
-      role: document.getElementById('prof-role').value.trim(),
-      tagline: document.getElementById('prof-tagline').value.trim(),
-      bio: document.getElementById('prof-bio').value.trim(),
-      steps: document.getElementById('prof-steps').value.split('\n').map(x=>x.trim()).filter(Boolean),
-      riskLine: document.getElementById('prof-risk').value.trim(),
-      location: document.getElementById('prof-location').value.trim(),
-      available: document.getElementById('prof-available').value.trim(),
-      email: document.getElementById('prof-email').value.trim(),
-      telegram: document.getElementById('prof-telegram').value.trim(),
-      github: document.getElementById('prof-github').value.trim(),
-      kwork: document.getElementById('prof-kwork').value.trim(),
-      heroChip: document.getElementById('prof-chip').value.trim(),
-      heroChip2: document.getElementById('prof-chip2').value.trim(),
-      stackTitle: document.getElementById('prof-stack-title').value.trim(),
-      stackText: document.getElementById('prof-stack-text').value.trim(),
-      limits: document.getElementById('prof-limits').value.split('\n').map(x=>x.trim()).filter(Boolean),
-      skills: {
-        'Уже делал на': split(document.getElementById('prof-skills-used').value),
-      }
-    };
-    renderProfile();
-    setStatus('Профиль обновлён локально. Не забудьте опубликовать.');
-  });
-
   /* ---------- lead form ---------- */
   // Заполните после регистрации на formspree.io (Settings → New Form → Get form endpoint), например:
   // "https://formspree.io/f/abcdwxyz"
@@ -1086,49 +788,6 @@
       '&body=' + encodeURIComponent(body);
     window.location.href = mailto;
     leadStatus.textContent = 'Открываем почтовый клиент - проверьте, что письмо ушло.';
-  });
-
-  /* ---------- publish ---------- */
-  const statusEl = document.getElementById('admin-status');
-  const publishBtn = document.getElementById('publish-btn');
-  function setStatus(msg, isError){
-    statusEl.textContent = msg || '';
-    statusEl.style.color = isError ? 'var(--danger)' : 'var(--text-dim)';
-  }
-
-  publishBtn.addEventListener('click', async ()=>{
-    if(!artifactApi){
-      setStatus('Публикация доступна только внутри Claude - откройте сайт как артефакт claude.ai.', true);
-      return;
-    }
-    publishBtn.disabled = true;
-    setStatus('Публикуем…');
-    try{
-      const res = await fetch(location.href, {cache:'no-store'});
-      if(!res.ok) throw {code:'fetch_failed'};
-      const raw = await res.text();
-      const json = JSON.stringify(state).replace(/</g, '\\u003c');
-      const re = /(<script id="state-data" type="application\/json">)[\s\S]*?(<\/script>)/;
-      if(!re.test(raw)) throw {code:'template_not_found'};
-      const updated = raw.replace(re, (m,a,b)=> a + json + b);
-      await artifactApi.publish(updated);
-      setStatus('Опубликовано! Страница обновится для всех.');
-    }catch(err){
-      const code = err && err.code;
-      if(code === 'not_writer' || code === 'not_granted'){
-        setStatus('У вас нет прав на публикацию этого сайта.', true);
-      } else if(code === 'conflict'){
-        setStatus('Кто-то уже опубликовал новую версию - страница сейчас обновится.', true);
-      } else if(code === 'rate_limited'){
-        setStatus('Слишком много публикаций подряд - подождите немного.', true);
-      } else if(code === 'template_not_found' || code === 'fetch_failed'){
-        setStatus('Не удалось подготовить страницу к публикации. Попробуйте ещё раз.', true);
-      } else {
-        setStatus('Не удалось опубликовать изменения. Попробуйте ещё раз.', true);
-      }
-    }finally{
-      publishBtn.disabled = false;
-    }
   });
 
   renderAll();
