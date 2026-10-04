@@ -1,931 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>foy4ik</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
-  :root{
-    --bg:#f5f4fa; --bg-elevated:#ffffff; --surface:#ffffff; --surface-2:#f0eef8;
-    --border:#e3e0ee; --text:#151420; --text-dim:#635f72;
-    --accent:#6a3df0; --accent-rgb:106,61,240;
-    --accent-2:#0ea88a; --accent-2-rgb:14,168,138;
-    --danger:#d6304a; --shadow:0 20px 60px -20px rgba(20,10,60,.22);
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#09080d; --bg-elevated:#121119; --surface:#141319; --surface-2:#1b1a23;
-      --border:#28262f; --text:#eeecf5; --text-dim:#96919fa3; --text-dim:#98939f;
-      --accent:#8b6bff; --accent-rgb:139,107,255;
-      --accent-2:#3fe8bd; --accent-2-rgb:63,232,189;
-      --danger:#ff6b81; --shadow:0 30px 90px -24px rgba(0,0,0,.65);
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#09080d; --bg-elevated:#121119; --surface:#141319; --surface-2:#1b1a23;
-    --border:#28262f; --text:#eeecf5; --text-dim:#98939f;
-    --accent:#8b6bff; --accent-rgb:139,107,255;
-    --accent-2:#3fe8bd; --accent-2-rgb:63,232,189;
-    --danger:#ff6b81; --shadow:0 30px 90px -24px rgba(0,0,0,.65);
-  }
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дмитрий (foy4ik) - сайты, Telegram-боты и приложения под ключ</title>
+<meta name="description" content="Делаю сайты, Telegram-ботов, мини-приложения и десктопные программы под задачу вашего бизнеса. Сначала показываю готовую работу, платите, только когда всё устраивает.">
+<link rel="canonical" href="https://foy4ik.github.io/">
+<meta name="theme-color" content="#0E0D12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="foy4ik">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Дмитрий (foy4ik) - сайты, Telegram-боты и приложения под ключ">
+<meta property="og:description" content="Готовые решения с фиксированной ценой. Вы видите работающий результат до оплаты.">
+<meta property="og:url" content="https://foy4ik.github.io/">
+<meta property="og:image" content="https://foy4ik.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="preload" as="image" href="images/kairo/01-dashboard.webp" fetchpriority="high">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Дмитрий","alternateName":"foy4ik","url":"https://foy4ik.github.io/","jobTitle":"Разработчик сайтов, Telegram-ботов и приложений","sameAs":["https://github.com/foy4ik","https://t.me/foy4ik","https://kwork.ru/user/dimfilhf"]}</script>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
 
-  *{box-sizing:border-box;}
-  body{
-    background:var(--bg); color:var(--text);
-    font-family:"Inter",system-ui,sans-serif;
-    line-height:1.6; -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{font-family:"Inter",system-ui,sans-serif; font-weight:800;}
-  .mono, .eyebrow, .tag, .chip, .card-index, .btn, nav a, .field label, .admin-tab{
-    font-family:"JetBrains Mono",ui-monospace,monospace;
-  }
-  h1,h2,h3{text-wrap:balance; margin:0;}
-  a{color:inherit;}
-  ::selection{background:rgba(var(--accent-rgb),.35);}
-  button{font:inherit; cursor:pointer;}
-  input,textarea{font:inherit;}
+<div class="cursor" id="cursor" aria-hidden="true"><div class="cursor-dot"><span class="cursor-label"></span></div></div>
 
-  html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
-
-  .wrap{max-width:1080px; margin:0 auto; padding-inline:24px;}
-  section{padding-block:96px; position:relative; scroll-margin-top:76px;}
-  @media (max-width:640px){ section{padding-block:64px;} }
-
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--accent); margin-bottom:18px;
-  }
-  .eyebrow::before{content:""; width:20px; height:1px; background:var(--accent);}
-
-  /* ambient background */
-  #spotlight{
-    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0;
-    transition:opacity .4s ease;
-    background:radial-gradient(560px circle at var(--x,50%) var(--y,50%), rgba(var(--accent-rgb),.14), transparent 60%);
-  }
-  #grid-bg{
-    position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size:64px 64px;
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 75%);
-    opacity:.45;
-  }
-  main, nav, footer{position:relative; z-index:2;}
-
-  /* nav */
-  nav{
-    position:sticky; top:0; z-index:50;
-    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    background:color-mix(in srgb, var(--bg) 78%, transparent);
-    border-bottom:1px solid var(--border);
-  }
-  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-block:16px;}
-  .logo{display:flex; align-items:center; gap:8px; font-weight:600; font-size:15px; text-decoration:none; transition:opacity .2s;}
-  .logo:hover{opacity:.8;}
-  .logo-dot{width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(var(--accent-rgb),.18);}
-  .nav-links{gap:28px; list-style:none; margin:0; padding:0; font-size:13px; color:var(--text-dim); display:none;}
-  .nav-links a{text-decoration:none; transition:color .2s;}
-  .nav-links a:hover{color:var(--accent);}
-  .nav-toggle{
-    display:flex; align-items:center; justify-content:center; width:38px; height:38px;
-    border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--text);
-    flex-direction:column; gap:4px; flex-shrink:0;
-  }
-  .nav-toggle span{width:16px; height:2px; background:currentColor; border-radius:2px;}
-  @media (min-width:720px){
-    .nav-links{display:flex;}
-    .nav-toggle{display:none;}
-  }
-  @media (max-width:719px){
-    .nav-links{
-      position:absolute; top:100%; left:0; right:0; flex-direction:column; gap:0;
-      background:var(--bg-elevated); border-bottom:1px solid var(--border);
-      padding:4px 24px 12px; box-shadow:var(--shadow);
-    }
-    .nav-links.open{display:flex;}
-    .nav-links li{padding:12px 0; border-top:1px solid var(--border); font-size:14px;}
-  }
-  .status-pill{
-    display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-dim);
-    border:1px solid var(--border); padding:6px 12px; border-radius:99px; background:var(--surface);
-    white-space:nowrap;
-  }
-  @media (max-width:400px){ .status-pill{display:none;} }
-  .status-dot{width:7px; height:7px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 0 3px rgba(var(--accent-2-rgb),.2);}
-
-  /* hero */
-  .hero{padding-top:120px; padding-bottom:110px;}
-  .hero h1{font-size:clamp(38px,6vw,68px); letter-spacing:-.02em; line-height:1.05;}
-  .hero h1 span{color:var(--accent);}
-  .hero p.tagline{max-width:56ch; font-size:18px; color:var(--text-dim); margin-top:22px;}
-  .hero-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:26px;}
-  .hero-meta .chip{white-space:normal; flex-shrink:1; max-width:100%;}
-  .hero-cta{display:flex; flex-wrap:wrap; gap:14px; margin-top:38px;}
-
-  .btn{
-    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:500;
-    padding:13px 22px; border-radius:10px; border:1px solid transparent; text-decoration:none;
-    transition:transform .15s ease, background .2s, border-color .2s, box-shadow .2s;
-  }
-  .btn:active{transform:translateY(1px);}
-  .btn-primary{background:var(--accent); color:#fff;}
-  .btn-primary:hover{box-shadow:0 10px 30px -8px rgba(var(--accent-rgb),.55);}
-  .btn-ghost{border-color:var(--border); background:var(--surface); color:var(--text);}
-  .btn-ghost:hover{border-color:var(--accent);}
-  .btn-sm{padding:8px 14px; font-size:12px; border-radius:8px;}
-  .btn-danger{color:var(--danger); border-color:var(--danger);}
-
-  /* about */
-  .about-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:start;}
-  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
-  .bio{font-size:16px; color:var(--text-dim); max-width:60ch;}
-  .stat-list{display:grid; gap:12px; margin-top:28px;}
-  .stat{
-    border:1px solid var(--border); background:var(--surface); border-radius:12px;
-    padding:16px 20px; border-left:3px solid var(--accent);
-    display:flex; flex-direction:column; gap:5px;
-  }
-  .stat b{font-family:"Inter",sans-serif; font-weight:700; font-size:15.5px; line-height:1.35;}
-  .stat span{color:var(--text-dim); font-size:13px; line-height:1.5;}
-
-  .bio p{margin:0 0 14px;}
-  .bio p:last-child{margin-bottom:0;}
-  .steps-list{list-style:none; counter-reset:step; display:grid; gap:14px; margin:24px 0 0; padding:0;}
-  .steps-list li{display:flex; gap:14px; align-items:flex-start; font-size:14.5px; color:var(--text-dim); line-height:1.6;}
-  .steps-list li::before{
-    counter-increment:step; content:counter(step); flex:0 0 28px; height:28px; margin-top:1px;
-    border-radius:50%; background:rgba(var(--accent-rgb),.15); color:var(--accent);
-    font-family:"JetBrains Mono",monospace; font-weight:700; font-size:13px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .bio-risk{
-    margin-top:22px; padding:16px 20px; border-radius:12px; border-left:3px solid var(--accent-2);
-    background:var(--surface); color:var(--text); font-weight:600; font-size:14.5px; line-height:1.55;
-  }
-  .stat-row{grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:56px;}
-  .stack-any{border:1px solid var(--border); background:var(--surface); border-radius:14px; padding:20px 22px; border-left:3px solid var(--accent-2);}
-  .stack-any b{display:block; font-size:clamp(28px,4vw,38px); font-weight:800; line-height:1.1; letter-spacing:-.02em;}
-  .stack-any p{margin:8px 0 0; color:var(--text-dim); font-size:14px; line-height:1.6;}
-  .limits h3{font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); font-weight:500; margin-bottom:10px;}
-  .limits ul{margin:0; padding:0; list-style:none; display:grid; gap:8px;}
-  .limits li{color:var(--text-dim); font-size:13px; line-height:1.55; padding-left:16px; position:relative;}
-  .limits li::before{content:"-"; position:absolute; left:0; color:var(--accent);}
-  .skills-col{display:grid; gap:22px;}
-  .skill-group h3{font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-dim); font-weight:500; margin-bottom:12px;}
-  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
-  .chip{
-    font-size:12.5px; padding:7px 12px; border-radius:8px;
-    background:var(--surface-2); border:1px solid var(--border); color:var(--text);
-    white-space:nowrap; flex-shrink:0;
-  }
-
-  /* projects */
-  .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:40px; flex-wrap:wrap;}
-  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px;}
-  .card{
-    border:1px solid var(--border); border-radius:16px; background:var(--surface);
-    overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow);
-    opacity:0; transform:translateY(0); cursor:pointer;
-    transition:transform .25s ease, border-color .25s ease;
-  }
-  .card:hover{transform:translateY(-4px); border-color:var(--accent);}
-  .card:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
-  .card-art{
-    height:190px; position:relative; display:flex; align-items:flex-start; justify-content:space-between;
-    padding:16px; color:#fff; overflow:hidden; background:var(--surface-2);
-  }
-  .card-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .35s ease;}
-  .card:hover .card-art img{transform:scale(1.04);}
-  .card-index{position:relative; z-index:1; font-size:12px; opacity:.85; background:rgba(0,0,0,.35); padding:4px 8px; border-radius:6px;}
-  .card-mono{font-family:"Inter",sans-serif; font-weight:800; font-size:54px; opacity:.28; align-self:flex-end;}
-  .card-body{padding:22px; display:flex; flex-direction:column; gap:12px; flex:1;}
-  .card-badge{
-    align-self:flex-start; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
-    color:var(--accent-2); border:1px solid rgba(var(--accent-2-rgb),.4); padding:3px 8px; border-radius:6px;
-  }
-  .card-body h3{font-size:19px;}
-  .card-tagline{color:var(--text-dim); font-size:13.5px; margin-top:-6px;}
-  .card-desc{font-size:14px; color:var(--text-dim); flex:1;}
-  .card-tags{display:flex; flex-wrap:wrap; gap:6px;}
-  .tag{font-size:11px; color:var(--text-dim); background:var(--surface-2); padding:4px 9px; border-radius:6px; border:1px solid var(--border);}
-  .card-links{display:flex; gap:16px; margin-top:4px; font-size:13px;}
-  .card-links a{text-decoration:none; color:var(--accent); display:inline-flex; align-items:center; gap:5px; position:relative; z-index:2;}
-  .card-links a:hover{color:var(--accent-2);}
-  .card-more{font-size:12.5px; color:var(--text-dim); margin-top:-2px;}
-  .empty-state{
-    border:1px dashed var(--border); border-radius:16px; padding:48px 24px; text-align:center;
-    color:var(--text-dim); font-size:14px;
-  }
-
-  /* services */
-  .section-sub{color:var(--text-dim); font-size:15px; max-width:56ch; margin:12px 0 0;}
-  .services-grid{display:grid; grid-template-columns:1fr; gap:20px;}
-  @media (min-width:640px){ .services-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
-  @media (min-width:1000px){ .services-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
-  .svc{
-    border:1px solid var(--border); border-radius:16px; background:var(--surface); box-shadow:var(--shadow);
-    padding:24px; display:flex; flex-direction:column; gap:18px; min-width:0;
-  }
-  .svc.reveal{transition:opacity .6s ease, transform .6s ease, border-color .25s ease;}
-  .svc:hover{border-color:var(--accent);}
-  .svc-top{display:flex; align-items:center; gap:14px;}
-  .svc-emoji{
-    flex:0 0 48px; height:48px; border-radius:12px; background:var(--surface-2); border:1px solid var(--border);
-    display:flex; align-items:center; justify-content:center; font-size:24px; line-height:1;
-  }
-  .svc-top h3{font-size:18px; line-height:1.25; min-width:0; overflow-wrap:anywhere;}
-  .svc-main{flex:1; display:flex; flex-direction:column; gap:16px;}
-  .svc-label{
-    display:block; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--accent); margin-bottom:6px;
-  }
-  .svc-for{margin:0; font-size:14px; color:var(--text-dim); line-height:1.55;}
-  .svc .feature-list{margin:0;}
-  .svc-note{margin:0; font-size:12px; color:var(--text-dim); line-height:1.5;}
-  .svc-example{
-    align-self:flex-start; background:none; border:none; padding:6px 0; color:var(--accent);
-    font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:5px;
-  }
-  .svc-example:hover{color:var(--accent-2);}
-  @media (max-width:640px){ .svc-example{min-height:44px;} }
-  .svc-example:focus-visible, .svc-cta:focus-visible, .services-custom .btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
-  .svc-meta{display:flex; border:1px solid var(--border); border-radius:12px; background:var(--surface-2); overflow:hidden;}
-  .svc-meta > div{flex:1 1 0; min-width:0; padding:12px 14px;}
-  .svc-meta > div + div{border-left:1px solid var(--border);}
-  .svc-meta small{display:block; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-dim);}
-  .svc-meta b{display:block; margin-top:2px; font-size:17px; font-weight:800; line-height:1.25; overflow-wrap:anywhere;}
-  .svc-price b{color:var(--accent);}
-  .svc-cta{width:100%; justify-content:center; min-height:46px;}
-  .services-custom{
-    margin-top:28px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
-    padding:28px 32px; border:1px dashed rgba(var(--accent-rgb),.55); border-radius:18px;
-    background:linear-gradient(120deg, rgba(var(--accent-rgb),.14), rgba(var(--accent-rgb),.03) 70%);
-  }
-  .services-custom h3{font-size:clamp(20px,3vw,26px);}
-  .services-custom p{margin:8px 0 0; color:var(--text-dim); font-size:14.5px; max-width:56ch;}
-  @media (max-width:640px){
-    .services-custom{padding:22px 20px;}
-    .services-custom .btn{width:100%; justify-content:center; min-height:46px;}
-  }
-
-  /* project modal */
-  .project-modal-overlay{
-    position:fixed; inset:0; z-index:110; background:rgba(5,4,10,.6);
-    display:flex; align-items:center; justify-content:center; padding:20px;
-    opacity:0; pointer-events:none; transition:opacity .25s ease;
-  }
-  .project-modal-overlay.open{opacity:1; pointer-events:auto;}
-  .project-modal{
-    background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px;
-    max-width:860px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:var(--shadow);
-    position:relative;
-  }
-  .modal-close{
-    position:absolute; top:14px; right:14px; z-index:6;
-    width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
-    background:var(--surface); color:var(--text); display:flex; align-items:center; justify-content:center;
-    font-size:18px; line-height:1;
-  }
-  .modal-close:hover{border-color:var(--accent); color:var(--accent);}
-  .gallery{position:relative; background:#08070d; aspect-ratio:16/10; overflow:hidden;}
-  .gallery img{
-    width:100%; height:100%; object-fit:contain; display:block;
-    transition:transform .32s cubic-bezier(.22,.8,.36,1), opacity .32s ease;
-  }
-  .gallery video{width:100%; height:100%; object-fit:contain; display:block; background:#000; transition:transform .32s cubic-bezier(.22,.8,.36,1), opacity .32s ease;}
-  @media (prefers-reduced-motion:reduce){ .gallery img, .gallery video{transition:none;} }
-  .gallery-nav{
-    position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
-    background:rgba(0,0,0,.5); color:#fff; border:none; display:flex; align-items:center; justify-content:center;
-    font-size:18px; cursor:pointer;
-  }
-  .gallery-nav:hover{background:rgba(0,0,0,.75);}
-  .gallery-prev{left:12px;}
-  .gallery-next{right:12px;}
-  .gallery-counter{
-    position:absolute; bottom:12px; right:14px; font-size:11.5px; color:#fff;
-    background:rgba(0,0,0,.55); padding:3px 10px; border-radius:20px;
-  }
-  .gallery-dots{position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:6px;}
-  .gallery-dot{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.4); cursor:pointer;}
-  .gallery-dot.active{background:#fff;}
-  .modal-body{padding:26px 30px 32px;}
-  .modal-body h3{font-size:22px;}
-  .modal-meta{color:var(--text-dim); font-size:13px; margin-top:3px;}
-  .modal-desc p{color:var(--text-dim); font-size:14.5px; line-height:1.7; margin:14px 0 0;}
-  .feature-list{list-style:none; padding:0; margin:16px 0 0; display:grid; gap:9px;}
-  .feature-list li{font-size:13.5px; color:var(--text-dim); line-height:1.55; padding-left:22px; position:relative;}
-  .feature-list li::before{content:"✓"; position:absolute; left:0; top:0; color:var(--accent-2); font-weight:700;}
-  .modal-tags{margin-top:18px;}
-  .modal-links{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;}
-
-  /* contact */
-  .contact-box{
-    border:1px solid var(--border); border-radius:20px; background:var(--surface);
-    padding:48px 40px; box-shadow:var(--shadow);
-  }
-  .contact-box h2{font-size:clamp(26px,4vw,38px);}
-  .contact-box p{color:var(--text-dim); margin-top:12px;}
-  .contact-links{display:flex; gap:14px; margin-top:30px; flex-wrap:wrap;}
-  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
-  @media (max-width:760px){ .contact-grid{grid-template-columns:1fr;} }
-  .contact-form-col{border-left:1px solid var(--border); padding-left:48px;}
-  @media (max-width:760px){ .contact-form-col{border-left:none; border-top:1px solid var(--border); padding-left:0; padding-top:32px;} }
-  .contact-form-col h3{font-size:18px; margin-bottom:6px;}
-  .contact-form-col > p{color:var(--text-dim); font-size:13.5px; margin-bottom:20px;}
-  #lead-status{font-size:12.5px; color:var(--accent-2); min-height:16px; margin-top:4px;}
-
-  footer{border-top:1px solid var(--border); padding-block:28px; margin-top:40px;}
-  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; font-size:12.5px; color:var(--text-dim);}
-
-  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
-  .reveal.in-view{opacity:1; transform:translateY(0);}
-  @media (prefers-reduced-motion:reduce){
-    .reveal{opacity:1; transform:none; transition:none;}
-    .card{opacity:1;}
-  }
-
-  .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
-  .field label{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-dim);}
-  .field input, .field textarea{
-    background:var(--surface); border:1px solid var(--border); color:var(--text);
-    border-radius:8px; padding:10px 12px; font-size:13.5px; font-family:"Inter",sans-serif; width:100%;
-  }
-  .field input:focus, .field textarea:focus{outline:2px solid rgba(var(--accent-rgb),.4); border-color:var(--accent);}
-  .field textarea{resize:vertical; min-height:70px;}
-  .field-row{display:flex; gap:10px;}
-  .field-row .field{flex:1;}
-  .checkbox-field{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-dim); margin-bottom:14px;}
-
-  [hidden]{display:none !important;}
-</style>
-
-<div id="grid-bg"></div>
-<div id="spotlight"></div>
-
-<nav>
-  <div class="wrap">
-    <a class="logo" href="#home"><span class="logo-dot"></span><span id="nav-name">foy4ik</span></a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#about">Обо мне</a></li>
-      <li><a href="#skills">Стек</a></li>
-      <li id="nav-services" hidden><a href="#services">Услуги</a></li>
-      <li><a href="#projects">Проекты</a></li>
-      <li><a href="#contact">Контакты</a></li>
-    </ul>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="status-pill" id="status-pill"><span class="status-dot"></span><span id="status-text">Открыт для проектов</span></div>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span><span></span></button>
-    </div>
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#hero" data-nav-home aria-label="На главную"><i></i><span id="brand-name">FOY4IK</span></a>
+    <nav aria-label="Основная навигация">
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#services" data-sec="services">Услуги</a></li>
+        <li><a href="#projects" data-sec="projects">Проекты</a></li>
+        <li><a href="#about" data-sec="about">О себе</a></li>
+        <li id="nav-reviews" hidden><a href="#reviews" data-sec="reviews">Отзывы</a></li>
+        <li><a href="#contact" data-sec="contact">Контакты</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-accent nav-cta" href="#contact" data-magnetic data-cursor="">Обсудить проект</a>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
   </div>
-</nav>
+</header>
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <a href="#services">Услуги</a><a href="#projects">Проекты</a><a href="#about">О себе</a><a href="#reviews" id="mm-reviews" hidden>Отзывы</a><a href="#contact">Контакты</a>
+</div>
 
-<main>
-  <section class="hero wrap" id="home">
-    <p class="eyebrow" id="hero-eyebrow">FULL STACK DEVELOPER</p>
-    <h1>Привет, я <span id="hero-name">foy4ik</span>.</h1>
-    <p class="tagline" id="hero-tagline">Создаю быстрые, продуманные веб-продукты - от идеи до релиза.</p>
-    <div class="hero-meta">
-      <span class="chip" id="hero-skills-count">💳 Оплата после демонстрации</span>
-      <span class="chip" id="hero-badge2">⚡ Разработка с ИИ - быстрее и дешевле обычного</span>
-      <span class="chip" id="hero-location">📍 Remote</span>
-    </div>
-    <div class="hero-cta">
-      <a href="#projects" class="btn btn-primary">Смотреть проекты</a>
-      <a href="#contact" class="btn btn-ghost">Написать мне</a>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="wrap about-grid">
-      <div class="reveal">
-        <p class="eyebrow">Обо мне</p>
-        <h2 style="font-size:clamp(24px,3vw,32px);">Быстро, под задачу и без риска для вас</h2>
-        <div class="bio" id="about-bio" style="margin-top:16px;"></div>
-        <ol class="steps-list" id="about-steps"></ol>
-        <p class="bio-risk" id="about-risk"></p>
-      </div>
-      <div class="reveal" id="skills" style="scroll-margin-top:90px;">
-        <p class="eyebrow">Стек</p>
-        <div class="skills-col" id="skills-grid"></div>
-      </div>
-    </div>
-    <div class="wrap reveal">
-      <div class="stat-list stat-row">
-        <div class="stat"><b id="stat-projects">0 проектов в портфолио</b><span>включая выполненные заказы</span></div>
-        <div class="stat"><b>Claude Code в каждом проекте</b><span>весь код в портфолио написан с его помощью</span></div>
-        <div class="stat"><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов и шаблонов</span></div>
-        <div class="stat"><b>Оплата после демонстрации</b><span>показываю готовую работу, файлы передаю только после оплаты</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="services" hidden>
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow">Услуги</p>
-          <h2 style="font-size:clamp(24px,3vw,32px);">Готовые решения с фиксированной ценой</h2>
-          <p class="section-sub">Вы видите работающий результат до оплаты. Срок и цену называю до старта</p>
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Приветствие">
+    <div class="hero-stage" id="hero-stage">
+      <div class="hero-copy" id="hero-copy">
+        <p class="pill" id="hero-pill"><i></i><span id="hero-status">Открыт для заказов</span></p>
+        <h1 id="hero-title">Создаю сайты, которые хочется открыть ещё раз.</h1>
+        <p class="hero-lead" id="hero-lead"></p>
+        <div class="hero-badges" id="hero-badges"></div>
+        <div class="hero-cta">
+          <a class="btn btn-accent" href="#projects" data-magnetic>Смотреть проекты <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#contact" data-magnetic>Обсудить проект</a>
         </div>
       </div>
-      <div class="services-grid" id="services-grid"></div>
-      <div class="services-custom reveal">
+      <div class="hero-object" id="hero-object" aria-hidden="true">
+        <div class="ho-glow"></div>
+        <div class="ho-tilt" id="ho-tilt">
+          <div class="ho-layer ho-window" data-depth="0.4">
+            <div class="ho-bar"><i></i><i></i><i></i><span class="ho-url" id="ho-url">foy4ik.github.io/kairo</span></div>
+            <div class="ho-view"><img id="ho-img" src="images/kairo/01-dashboard.webp" alt="" width="1280" height="800" decoding="async" fetchpriority="high"></div>
+          </div>
+          <div class="ho-layer" data-depth="1.5" style="left:-7%;bottom:4%;width:46%;"><div class="ho-card ho-float" style="animation-delay:-2s;">
+            <div class="ho-head"><i></i>Бот записи</div>
+            <div class="row-gap"><div class="bub me">Запись на завтра</div><div class="bub">Свободно сегодня:</div><div class="ho-times"><span>12:00</span><span>14:30</span><span>18:00</span></div></div>
+          </div></div>
+          <div class="ho-layer" data-depth="2" style="right:-5%;bottom:-3%;width:50%;"><div class="ho-card ho-code ho-float" style="animation-delay:-4s;">
+            <b>const</b> site = <b>await</b> ship({<br>&nbsp;&nbsp;idea: <b>"ваш проект"</b>,<br>&nbsp;&nbsp;motion: <b>true</b>,<br>});<br><span class="ok">✓ deployed</span>
+          </div></div>
+          <div class="ho-layer" data-depth="1.2" style="right:-6%;top:-4%;width:44%;"><div class="ho-card ho-float" style="animation-delay:-1s;">
+            <div class="ho-head"><i></i>ИИ-консультант</div>
+            <div class="row-gap"><div class="bub me">Сколько стоит лендинг?</div><div class="bub">От 2 500 ₽, срок от 2 дней</div></div>
+          </div></div>
+          <div class="ho-layer ho-chip" data-depth="2.4">UI / motion</div>
+        </div>
+      </div>
+      <a class="scroll-hint" href="#services">Explore</a>
+      <span class="hero-label" aria-hidden="true">PORTFOLIO / 2026</span>
+      <div class="hero-dim" id="hero-dim"></div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section over" id="services" aria-labelledby="svc-title" hidden>
+    <span class="xr-label">section#services / scrub + tilt</span>
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow" data-reveal>01 / Услуги</p>
+        <h2 class="title" id="svc-title" data-split>Готовые решения с фиксированной ценой</h2>
+        <p class="sec-sub" data-reveal>Вы видите работающий результат до оплаты. Срок и цену называю до старта</p>
+      </header>
+      <div class="svc-grid" id="svc-grid"></div>
+      <div class="svc-custom" data-reveal>
         <div>
           <h3>Нужно что-то другое?</h3>
           <p>Мобильные и десктопные приложения, админ-панели под ваши процессы, интеграции - оценю индивидуально</p>
         </div>
-        <button type="button" class="btn btn-primary" id="services-custom-btn">Обсудить задачу</button>
+        <button type="button" class="btn btn-accent" id="svc-custom-btn" data-magnetic>Обсудить задачу <span class="arr">→</span></button>
       </div>
     </div>
   </section>
 
-  <section id="projects">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow">Портфолио</p>
-          <h2 style="font-size:clamp(24px,3vw,32px);">Проекты</h2>
+  <!-- PROJECTS -->
+  <section class="projects" id="projects" aria-labelledby="proj-title">
+    <span class="xr-label">section#projects / pin + horizontal</span>
+    <div class="proj-pin" id="proj-pin">
+      <div class="proj-track" id="proj-track">
+        <div class="proj-intro" id="proj-intro">
+          <p class="eyebrow">02 / Проекты</p>
+          <h2 class="title" id="proj-title" style="margin-top:16px;">Каждый проект - отдельная история, а не шаблон.</h2>
+          <p class="sec-sub">Крупные кейсы: кликните по проекту, чтобы открыть его целиком.</p>
+          <p class="proj-hint"><i></i>Скролльте вниз</p>
         </div>
       </div>
-      <div class="projects-grid" id="projects-grid"></div>
+      <div class="proj-progress" aria-hidden="true"><i id="proj-bar"></i></div>
+      <div class="proj-count" id="proj-count" aria-hidden="true">01 / 01</div>
     </div>
   </section>
 
-  <div class="project-modal-overlay" id="project-modal-overlay">
-    <div class="project-modal" id="project-modal" role="dialog" aria-modal="true" aria-label="Подробности проекта">
-      <button class="modal-close" id="modal-close" aria-label="Закрыть">✕</button>
-      <div class="gallery" id="modal-gallery">
-        <img id="modal-gallery-img" src="" alt="">
-        <video id="modal-gallery-video" controls playsinline preload="metadata" hidden></video>
-        <button class="gallery-nav gallery-prev" id="gallery-prev" aria-label="Предыдущее фото">‹</button>
-        <button class="gallery-nav gallery-next" id="gallery-next" aria-label="Следующее фото">›</button>
-        <span class="gallery-counter" id="gallery-counter"></span>
-        <div class="gallery-dots" id="gallery-dots"></div>
-      </div>
-      <div class="modal-body">
-        <h3 id="modal-title"></h3>
-        <p class="modal-meta" id="modal-meta"></p>
-        <div class="modal-desc" id="modal-desc"></div>
-        <ul class="feature-list" id="modal-features"></ul>
-        <div class="card-tags modal-tags" id="modal-tags"></div>
-        <div class="modal-links" id="modal-links"></div>
-      </div>
-    </div>
-  </div>
-
-  <section id="contact">
-    <div class="wrap">
-      <div class="contact-box reveal">
-        <div class="contact-grid">
-          <div>
-            <p class="eyebrow">Контакты</p>
-            <h2>Готовы обсудить проект?</h2>
-            <p>Расскажите, что нужно сделать - отвечу в течение дня.</p>
-            <div class="contact-links">
-              <a class="btn btn-primary" id="contact-email" href="#">✉️ Написать на почту</a>
-              <a class="btn btn-ghost" id="contact-telegram" href="#" target="_blank" rel="noopener">Telegram</a>
-              <a class="btn btn-ghost" id="contact-github" href="#" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn btn-ghost" id="contact-kwork" href="#" target="_blank" rel="noopener">Kwork</a>
-            </div>
-          </div>
-          <div class="contact-form-col">
-            <h3>Заявка на проект</h3>
-            <p>Коротко опишите задачу - я отвечу в течение дня.</p>
-            <form id="lead-form" target="lead-target-frame">
-              <input type="hidden" name="_subject" value="Заявка с сайта">
-              <div class="field"><label for="lead-name">Имя</label><input id="lead-name" name="name" required></div>
-              <div class="field"><label for="lead-contact">Telegram, email или телефон</label><input id="lead-contact" name="_replyto" required></div>
-              <div class="field"><label for="lead-message">Что нужно сделать</label><textarea id="lead-message" name="message" placeholder="Кратко опишите задачу" required></textarea></div>
-              <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Отправить заявку</button>
-              <div id="lead-status"></div>
-            </form>
-            <iframe name="lead-target-frame" hidden aria-hidden="true"></iframe>
-          </div>
+  <!-- ABOUT -->
+  <section class="section over" id="about" aria-labelledby="about-title" style="border-radius:0; border-top:0;">
+    <span class="xr-label">section#about / stack preview</span>
+    <div class="wrap about-grid">
+      <div class="about-copy">
+        <p class="eyebrow" data-reveal>03 / О себе</p>
+        <h2 class="title" id="about-title" style="margin-top:16px;" data-split>Я превращаю идеи в работающие digital-продукты.</h2>
+        <div class="about-bio" id="about-bio" data-reveal></div>
+        <ol class="steps" id="about-steps" data-reveal></ol>
+        <p class="risk" id="about-risk" data-reveal></p>
+        <div class="stats" id="about-stats" data-reveal>
+          <div><b id="stat-projects">0 проектов в портфолио</b><span>включая выполненные заказы</span></div>
+          <div><b>Claude Code в каждом проекте</b><span>весь код в портфолио написан с его помощью</span></div>
+          <div><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов и шаблонов</span></div>
+          <div><b>Оплата после демонстрации</b><span>показываю готовую работу, файлы передаю только после оплаты</span></div>
         </div>
       </div>
+      <div class="about-stack" data-reveal>
+        <p class="stack-label">Мой стек</p>
+        <p class="stack-head" id="stack-head">Любой</p>
+        <p class="stack-note" id="stack-note"></p>
+        <div class="chips" id="stack-chips" role="list"></div>
+        <div class="pv" id="stack-pv" aria-live="polite"></div>
+        <p class="limits-note" id="stack-limits"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section over" id="process" aria-labelledby="proc-title" style="border-radius:0; border-top:0; padding-top:0;">
+    <span class="xr-label">section#process / terminal sequence</span>
+    <div class="wrap proc-grid">
+      <div>
+        <p class="eyebrow" data-reveal>04 / Процесс</p>
+        <h2 class="title" id="proc-title" style="margin-top:16px;" data-split>От идеи до работающего сайта.</h2>
+        <div class="stages" id="stages" role="list"></div>
+      </div>
+      <div class="term" data-reveal>
+        <div class="term-bar"><i></i><i></i><i></i><span>~/my-project</span></div>
+        <div class="term-body" id="term-body" aria-live="off"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS (shown only when real reviews exist) -->
+  <section class="section over" id="reviews" aria-labelledby="rev-title" hidden style="border-radius:0; border-top:0; padding-top:0;">
+    <span class="xr-label">section#reviews / drag stack</span>
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow" data-reveal>05 / Отзывы</p>
+        <h2 class="title" id="rev-title" data-split>Что говорят клиенты.</h2>
+      </header>
+      <div class="rev-wrap">
+        <div class="rev-stack" id="rev-stack" data-cursor="DRAG"></div>
+        <div class="rev-ctl" id="rev-ctl"><button type="button" id="rev-prev" aria-label="Предыдущий отзыв">←</button><button type="button" id="rev-next" aria-label="Следующий отзыв">→</button><span id="rev-no">01 / 01</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section over contact" id="contact" aria-labelledby="contact-title" style="border-radius:0; border-top:0; padding-top:0;">
+    <span class="xr-label">section#contact / keyword tags + formspree</span>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>06 / Контакты</p>
+      <h2 class="title" id="contact-title" style="margin-top:16px;" data-split>Есть идея?</h2>
+      <p class="sec-sub" data-reveal>Расскажите, что нужно, и я предложу решение, срок и цену.</p>
+      <div class="idea" id="idea" data-reveal>
+        <form class="idea-card" id="idea-form" target="idea-frame" novalidate>
+          <input type="hidden" name="_subject" value="Заявка с сайта">
+          <input type="hidden" name="tags" id="idea-tags-input">
+          <label for="lead-message">Расскажите, что хотите создать</label>
+          <textarea id="lead-message" name="message" rows="2" placeholder="Например: нужен сайт для мастерской и Telegram-бот для записи..." required></textarea>
+          <div class="tags" id="idea-tags" aria-live="polite"></div>
+          <div class="idea-fields" id="idea-fields" hidden>
+            <div class="fld"><label for="lead-name">Имя</label><input id="lead-name" name="name" autocomplete="name" required></div>
+            <div class="fld"><label for="lead-contact">Telegram, email или телефон</label><input id="lead-contact" name="_replyto" autocomplete="off" required></div>
+            <button type="submit" class="btn btn-accent" id="idea-submit" data-magnetic>Отправить идею <span class="arr">→</span></button>
+          </div>
+          <p id="idea-error" role="alert" style="color:#ff9a9a; font-size:13px; margin-top:12px;" hidden></p>
+        </form>
+        <iframe name="idea-frame" hidden aria-hidden="true" title="send"></iframe>
+        <div class="sent" id="idea-sent" role="status"><div class="big">IDEA RECEIVED ✓</div><p>Спасибо! Заявка отправлена, отвечу в течение дня. Если хотите быстрее, напишите напрямую:</p></div>
+      </div>
+      <div class="contacts" id="contacts"></div>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span id="footer-name">© <span id="footer-year"></span> foy4ik</span>
-    <span>Написано с помощью Claude Code</span>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span id="foot-name">© 2026</span>
+    <button type="button" class="egg" id="egg" aria-expanded="false" aria-controls="xray-card">Built with curiosity + code.</button>
   </div>
 </footer>
 
-<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, Telegram-боты и приложения под ключ","tagline":"Делаю сайты, Telegram-ботов и мини-приложения под задачу вашего бизнеса. Сначала показываю готовую работу - платите, только когда всё устраивает.","heroChip":"💳 Оплата после демонстрации","heroChip2":"⚡ Разработка с ИИ - быстрее и дешевле обычного","stackTitle":"Любой","stackText":"Код пишет Claude Code, поэтому я не привязан к одному языку или фреймворку: беру тот стек, который лучше подходит задаче.","limits":["Закрытые SDK, особое оборудование и системы без доступа к среде - только если доступ будет у меня"],"bio":"Делаю сайты под ключ - от лендинга до каталога с личным кабинетом и админ-панелью, Telegram-ботов и мини-приложения, мобильные приложения под iOS и Android, десктопные программы и Python-решения: парсеры, автоматизацию, интеграции. Работаю по вашему макету или со своим дизайном.\n\nВ разработке использую Claude Code - ИИ-инструмент, который пишет код под моим руководством. Благодаря ему я делаю проекты в разы быстрее, чем при классической разработке, а значит, дешевле для вас. При этом ИИ - только инструмент: разобраться в задаче, продумать логику, проверить каждую функцию и запустить проект - моя работа.","steps":["Обсуждаем задачу, я называю срок и цену.","Делаю проект и показываю его в работе - в демо, без передачи файлов.","Вносим правки, если нужно.","Вы оплачиваете, я передаю исходники и помогаю с запуском."],"riskLine":"Вы ничем не рискуете: если результат не понравится, вы ничего не платите.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Уже делал на":["Next.js","React","TypeScript","Tailwind CSS","Node.js","Python","Rust + Tauri","PostgreSQL","SQLite","Prisma","Telegram Bot API","Vercel","GitHub Actions"]}},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","download":"https://github.com/foy4ik/kairo#download","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}],"services":[{"id":"svc-booking","emoji":"🗓️","title":"Бот записи клиентов (Telegram, VK, MAX)","audience":"салоны, барберы, мастера, репетиторы, студии","includes":["Выбор услуги, мастера и времени","Напоминания клиентам","Управление расписанием в админке","Рассылки по базе клиентов"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":""},{"id":"svc-leads","emoji":"📥","title":"Бот для приёма заявок","audience":"эксперты, онлайн-школы, сфера услуг","includes":["Квиз из нескольких вопросов","Сбор контактов","Мгновенная отправка заявки менеджеру","База клиентов в таблице","Рассылки"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":""},{"id":"svc-shop","emoji":"🛍️","title":"Магазин внутри Telegram (Mini App)","audience":"магазины, кафе, производители","includes":["Каталог с фото и фильтрами","Корзина и оформление заказа без выхода из Telegram","Уведомления о заказах","Админка для товаров и заказов"],"term":"от 3 дней","price":"от 7 000 ₽","note":"","projectId":"taskflow"},{"id":"svc-landing","emoji":"🚀","title":"Лендинг под ключ","audience":"услуги, продукт, мероприятие","includes":["Адаптивный дизайн","Форма с отправкой заявок в Telegram","Подключение домена и хостинга","Базовая SEO-настройка"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":"finly"},{"id":"svc-catalog","emoji":"🗂️","title":"Сайт-каталог с админ-панелью","audience":"производители и магазины без онлайн-оплаты","includes":["Каталог с фильтрами","Импорт товаров из XML/Excel поставщика","Автоматическая наценка","Корзина-заявка","Админ-панель"],"term":"от 3 дней","price":"от 8 000 ₽","note":"","projectId":"trofimovskie"},{"id":"svc-parser","emoji":"🔎","title":"Парсер с уведомлениями","audience":"селлеры, перекупщики, закупки","includes":["Мониторинг Авито, WB, Ozon или сайтов конкурентов","Выгрузка в Excel/Google Таблицы","Уведомления в Telegram о новых объявлениях и изменении цен"],"term":"от 1 дня","price":"от 2 000 ₽","note":"","projectId":""},{"id":"svc-ai","emoji":"🤖","title":"ИИ-консультант для бизнеса","audience":"бизнес с потоком однотипных вопросов","includes":["Ответы клиентам по вашему прайсу и FAQ 24/7","Передача сложных вопросов и заявок менеджеру","Обучение на ваших материалах"],"term":"от 3 дней","price":"от 5 000 ₽","note":"Запросы к ИИ оплачиваются отдельно по тарифу провайдера","projectId":""},{"id":"svc-layout","emoji":"🎨","title":"Вёрстка по макету Figma","audience":"дизайнеры и студии","includes":["Адаптивная вёрстка близко к макету","HTML, CSS, JS","Меню, формы и анимации","Правки без ограничений"],"term":"от 1 дня","price":"от 1 600 ₽","note":"3 пакета - до 3 блоков за 1 600 ₽, лендинг до 7 блоков за 2 400 ₽, до 3 страниц или 12 блоков за 3 600 ₽","projectId":""}]}</script>
+<div class="corner r" id="corner-no" aria-hidden="true">01</div>
 
-<script>
-(function(){
-  "use strict";
-  const stateEl = document.getElementById('state-data');
-  let state = JSON.parse(stateEl.textContent);
+<aside class="xray-card" id="xray-card" aria-label="Технический слой">
+  <h4>Under the hood</h4>
+  <div><b>HTML + CSS + JS</b> (ES modules), без сборки</div>
+  <div><b>GSAP + ScrollTrigger</b>: pin, scrub, parallax</div>
+  <div><b>Lenis</b>: плавный скролл</div>
+  <div><b>Данные</b>: JSON в странице, правятся админкой</div>
+  <div><b>Хостинг</b>: GitHub Pages</div>
+  <div class="m" style="color:var(--muted)">Нажмите ещё раз, чтобы скрыть слои.</div>
+</aside>
 
-  /* ---------- rendering ---------- */
-  function escapeHtml(s){
-    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  function hueFor(str){
-    let h = 0;
-    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) % 360; }
-    return h;
-  }
+<!-- CASE: immersive project view -->
+<div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="case-title" aria-hidden="true" data-lenis-prevent>
+  <div class="case-bar">
+    <button type="button" class="btn btn-ghost" id="case-back" data-cursor="">← Все проекты</button>
+    <span class="case-count" id="case-count"></span>
+    <button type="button" class="case-x" id="case-close" aria-label="Закрыть проект">✕</button>
+  </div>
+  <div class="case-scroll" id="case-scroll" tabindex="-1"></div>
+</div>
 
-  function renderProfile(){
-    const p = state.profile;
-    document.title = p.name || 'foy4ik';
-    document.getElementById('nav-name').textContent = p.name;
-    document.getElementById('hero-eyebrow').textContent = (p.role || '').toUpperCase();
-    document.getElementById('hero-name').textContent = p.name;
-    document.getElementById('hero-tagline').textContent = p.tagline;
-    document.getElementById('hero-location').textContent = '📍 ' + p.location;
-    document.getElementById('hero-skills-count').textContent = p.heroChip || ('🛠️ ' + p.role);
-    document.getElementById('hero-badge2').textContent = p.heroChip2 || '';
-    document.getElementById('hero-badge2').hidden = !p.heroChip2;
-    document.getElementById('status-text').textContent = p.available;
-    document.getElementById('about-bio').innerHTML = (p.bio || '').split(/\n\s*\n/).map(t=>`<p>${escapeHtml(t.trim())}</p>`).join('');
-    document.getElementById('about-steps').innerHTML = (p.steps || []).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
-    document.getElementById('about-risk').textContent = p.riskLine || '';
-    document.getElementById('about-risk').hidden = !p.riskLine;
-    document.getElementById('footer-name').innerHTML = '© <span id="footer-year"></span> ' + escapeHtml(p.name);
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
+<script id="state-data" type="application/json">{"profile":{"name":"Дмитрий (foy4ik)","role":"Сайты, Telegram-боты и приложения под ключ","tagline":"Делаю сайты, Telegram-ботов и мини-приложения под задачу вашего бизнеса. Сначала показываю готовую работу - платите, только когда всё устраивает.","heroChip":"💳 Оплата после демонстрации","heroChip2":"⚡ Разработка с ИИ - быстрее и дешевле обычного","stackTitle":"Любой","stackText":"Код пишет Claude Code, поэтому я не привязан к одному языку или фреймворку: беру тот стек, который лучше подходит задаче.","limits":["Закрытые SDK, особое оборудование и системы без доступа к среде - только если доступ будет у меня"],"bio":"Делаю сайты под ключ - от лендинга до каталога с личным кабинетом и админ-панелью, Telegram-ботов и мини-приложения, мобильные приложения под iOS и Android, десктопные программы и Python-решения: парсеры, автоматизацию, интеграции. Работаю по вашему макету или со своим дизайном.\n\nВ разработке использую Claude Code - ИИ-инструмент, который пишет код под моим руководством. Благодаря ему я делаю проекты в разы быстрее, чем при классической разработке, а значит, дешевле для вас. При этом ИИ - только инструмент: разобраться в задаче, продумать логику, проверить каждую функцию и запустить проект - моя работа.","steps":["Обсуждаем задачу, я называю срок и цену.","Делаю проект и показываю его в работе - в демо, без передачи файлов.","Вносим правки, если нужно.","Вы оплачиваете, я передаю исходники и помогаю с запуском."],"riskLine":"Вы ничем не рискуете: если результат не понравится, вы ничего не платите.","location":"Remote","available":"Открыт для новых заказов","email":"dmitriyfilatov3@gmail.com","telegram":"https://t.me/foy4ik","github":"https://github.com/foy4ik","kwork":"https://kwork.ru/user/dimfilhf","skills":{"Уже делал на":["Next.js","React","TypeScript","Tailwind CSS","Node.js","Python","Rust + Tauri","PostgreSQL","SQLite","Prisma","Telegram Bot API","Vercel","GitHub Actions"]},"heroTitle":"Создаю сайты,\nкоторые хочется\nоткрыть ещё раз."},"projects":[{"id":"kairo","title":"Kairo","tagline":"Десктопное приложение для проектов, задач и фокуса","description":"Офлайн-приложение для проектов, задач, заметок и фокуса на Tauri 2 + Rust + SQLite: без аккаунта и сервера, данные хранятся локально. Есть онлайн-демо.","meta":"Портфолио-проект - десктопное приложение, соло-разработка","fullDescription":["Kairo собирает в одном офлайн-приложении весь рабочий цикл: спланировать, сфокусироваться, поработать, зафиксировать, подвести итоги. Никакого аккаунта и сервера - все данные лежат в локальном файле SQLite на компьютере пользователя.","Ядро написано на Rust (Tauri 2), интерфейс - на React и TypeScript. Есть установщики для Windows, macOS и Linux, автообновление с проверкой подписи из GitHub Releases и онлайн-демо, которое можно попробовать прямо в браузере без установки."],"features":["Канбан-доска: свои колонки, drag & drop с сохранением порядка, сортировка одним кликом по сроку и приоритету, быстрое добавление задачи одной строкой, фильтры, боковая панель с чек-листом, дедлайном и тегами","Заметки в Markdown с живым превью, папками, тегами, привязкой к задачам и автосохранением","Фокус-таймер на стороне Rust: продолжает работать при скрытом окне, обратный отсчёт в трее, системные уведомления, привязка к задаче","Аналитика: сессии, время в фокусе, разбивка по проектам и тегам, серия дней подряд","Командная палитра (Ctrl+K), работа целиком с клавиатуры, русский и английский без перезапуска, светлая и тёмная темы (тёмная нарисована отдельно, а не инвертирована)","Экспорт и импорт данных в JSON с валидацией и автоматической резервной копией; санитизация Markdown, строгий CSP, проверка подписи обновлений","Качество: 43 unit-теста, 28 тестов на Rust, 41 e2e-сценарий на Playwright, аудит доступности WCAG 2.1 AA по всем экранам без нарушений, CI и сборка инсталляторов под три ОС"],"tags":["Tauri 2","Rust","SQLite","React 18","TypeScript","Tailwind CSS","Zustand"],"link":"https://foy4ik.github.io/kairo/","linkLabel":"Онлайн-демо","repo":"https://github.com/foy4ik/kairo","download":"https://github.com/foy4ik/kairo#download","badge":"Desktop-приложение","video":"images/kairo/kairo-demo.mp4","images":["images/kairo/01-dashboard.webp","images/kairo/02-board.webp","images/kairo/10-sort-confirm.webp","images/kairo/03-notes.webp","images/kairo/04-focus.webp","images/kairo/05-analytics.webp","images/kairo/09-command-palette.webp","images/kairo/08-settings.webp","images/kairo/06-dashboard-light.webp","images/kairo/07-board-light.webp"]},{"id":"finly","title":"Finly","tagline":"Лендинг сервиса управления личными финансами","description":"Коммерческий SaaS-лендинг для вымышленного финтех-продукта: продуманная архитектура компонентов, анимации и адаптивная вёрстка уровня продакшена.","meta":"Портфолио-проект - UI/UX, вёрстка, анимации","fullDescription":["Полноценный коммерческий лендинг для вымышленного SaaS-продукта в сфере личных финансов. Цель проекта - показать полный цикл фронтенд-разработки: от продуманной компонентной архитектуры до анимаций и адаптивной вёрстки уровня продакшена."],"features":["Адаптивная вёрстка от 390px до 1440px+, с переработанным мобильным меню (не просто сжатая десктоп-версия)","Hero-секция с анимированной mockup-карточкой дашборда: счётчики баланса, дорисовывающийся при скролле SVG-график","Тёмная секция превью приложения: баланс, доходы и расходы, разбивка по категориям, фильтруемый список транзакций со своим empty state","Интерактивные тарифы с переключением Monthly/Yearly и живым пересчётом цены","Модальная форма подписки с email-валидацией и состояниями loading/success/error","FAQ-аккордеон, отзывы, social proof, плавный скролл, hover-эффекты на всех интерактивных элементах"],"tags":["Next.js 16","TypeScript","Tailwind CSS v4","shadcn/ui","Framer Motion"],"link":"https://finly-sandy.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/finly","badge":"","images":["images/finly/finly-01-hero.webp","images/finly/finly-02-dashboard.webp","images/finly/finly-03-pricing.webp","images/finly/finly-04-features.webp","images/finly/finly-05-mobile.webp","images/finly/finly-06-mobile-menu.webp"]},{"id":"forma-studio","title":"Forma Studio","tagline":"Сайт дизайн-студии интерьеров","description":"Многостраничный сайт премиальной студии дизайна интерьеров: каталог кейсов, полноэкранная галерея, формы и анимации на уровне продакшена.","meta":"Портфолио-проект, соло - от архитектуры до деплоя","fullDescription":["Многостраничный сайт для вымышленной премиальной студии дизайна интерьеров. Самостоятельный проект для портфолио: полный цикл - от архитектуры до деплоя."],"features":["Главная страница: hero, подборка проектов, услуги, процесс работы, отзывы","Каталог проектов (9 кейсов) с фильтрацией по категориям, подгрузкой и анимацией сетки","Детальная страница проекта: полноэкранная галерея с управлением с клавиатуры, навигация между соседними проектами, похожие проекты","Страница услуг с описанием процесса по каждому направлению","Страница «о студии»: таймлайн, команда, ценности, цифры","Форма обратной связи с клиентской валидацией и состояниями загрузки/успеха/ошибки","Кастомная 404-страница, полная адаптивность, fullscreen-меню на мобильных","SEO-метаданные для каждой страницы, семантическая разметка, поддержка prefers-reduced-motion"],"tags":["Next.js","TypeScript","Tailwind CSS","Framer Motion","Lucide Icons"],"link":"https://forma-studio-rouge-nine.vercel.app/","linkLabel":"Демо","repo":"https://github.com/foy4ik/forma-studio","badge":"","images":["images/forma/01-home-hero.webp","images/forma/02-projects-catalog.webp","images/forma/03-project-detail.webp","images/forma/04-project-gallery-lightbox.webp","images/forma/05-services.webp","images/forma/06-mobile-home.webp"]},{"id":"taskflow","title":"TaskFlow","tagline":"Telegram Mini App для задач и напоминаний","description":"Telegram Mini App для управления задачами и напоминаниями с криптографически проверенной авторизацией через Telegram, PostgreSQL и Next.js.","meta":"Telegram Mini App - full-stack","fullDescription":["TaskFlow - полноценный менеджер задач, реализованный как нативное мини-приложение внутри Telegram. Авторизация проходит через сам Telegram: initData проверяется по HMAC-SHA256 на сервере при каждом запросе, поэтому подделать личность пользователя со стороны клиента невозможно.","Фронтенд - Next.js (App Router) и TypeScript, бэкенд - PostgreSQL и Prisma, с оптимистичными обновлениями интерфейса, тактильной обратной связью (haptics) и темой, которая мгновенно подстраивается под цветовую схему самого Telegram. У задач есть приоритеты, категории, сроки и настраиваемые напоминания - в момент события, за 30 минут/час/сутки, либо мягкое напоминание через час после дедлайна, если задача не выполнена - они приходят прямо от бота по расписанию. Интерфейс полностью двуязычный (русский/английский), спроектирован mobile-first под встроенный браузер Telegram, с отдельным вниманием к доступности, обработке ошибок и офлайн-состояниям."],"features":["Серверная HMAC-проверка initData от Telegram - клиентским данным о личности не доверяем никогда","Оптимистичные обновления, тактильная отдача, светлая/тёмная/нативная Telegram-тема","Настраиваемые напоминания по задачам, доставляются через реального Telegram-бота с точностью до минуты","Раздел статистики с графиком активности за 7 дней и разбивкой по категориям","Двуязычный интерфейс (RU/EN), адаптивный от 375px до десктопа"],"tags":["Next.js","TypeScript","PostgreSQL","Prisma","Telegram Mini Apps"],"link":"https://t.me/T4skFlowbot","linkLabel":"Открыть бота","repo":"https://github.com/foy4ik/taskflow","badge":"","images":["images/taskflow/home.webp","images/taskflow/tasks.webp","images/taskflow/create-form.webp","images/taskflow/statistics.webp"]},{"id":"trofimovskie","title":"Трофимовские кухни","tagline":"Каталог сопутствующих товаров + админ-панель","description":"Каталог сопутствующих товаров (47 000+ SKU) с автоимпортом из XML-фида поставщика и админ-панелью с нуля - инструмент для менеджеров производителя кухонь.","meta":"Веб-приложение, соло-разработка","fullDescription":["Производитель кухонь на заказ допродаёт клиентам сопутствующие товары - фурнитуру, мойки, смесители, ручки, направляющие - по каталогу поставщика на 47 000+ SKU. Нужен был инструмент для менеджеров: показать клиенту каталог, собрать корзину, отправить её по ссылке клиенту, а тот сам оформляет заявку - без онлайн-оплаты и доставки, это витрина с быстрым оформлением интереса, а не интернет-магазин."],"features":["Автоимпорт каталога из XML-фида поставщика: потоковый парсинг 47 000+ товаров и 1300+ категорий, ежедневное обновление по расписанию, сравнение по хэшу и защитный порог на случай сбоя у поставщика","Ценовой движок: общая наценка + наценка по категории/товару + настраиваемое округление с понятным приоритетом правил","Публичный каталог: дерево категорий, полнотекстовый поиск, фильтры по бренду и характеристикам (включая свой двухползунковый range-слайдер для числовых параметров), сортировки, пагинация, галерея фото на карточке товара","Корзина без регистрации, расшаривание по ссылке, клиент сам дооформляет заявку","Админ-панель с нуля: товары и категории с откатом ручных правок к исходнику из фида, наценки, статические страницы, баннеры, заявки, история импортов, восстановление битых картинок","Self-hosted продакшен: свой Node-сервер, cron внутри процесса, SQLite с решением проблем конкурентной записи"],"tags":["Next.js","TypeScript","Prisma","SQLite","Tailwind CSS","XML-парсинг"],"link":"","linkLabel":"Демо","repo":"","badge":"Реальный заказ","images":["images/trofim/01-glavnaya.webp","images/trofim/02-kategoriya.webp","images/trofim/03-filtry.webp","images/trofim/04-admin-kategorii.webp"]}],"services":[{"id":"svc-booking","emoji":"🗓️","title":"Бот записи клиентов (Telegram, VK, MAX)","audience":"салоны, барберы, мастера, репетиторы, студии","includes":["Выбор услуги, мастера и времени","Напоминания клиентам","Управление расписанием в админке","Рассылки по базе клиентов"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":""},{"id":"svc-leads","emoji":"📥","title":"Бот для приёма заявок","audience":"эксперты, онлайн-школы, сфера услуг","includes":["Квиз из нескольких вопросов","Сбор контактов","Мгновенная отправка заявки менеджеру","База клиентов в таблице","Рассылки"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":""},{"id":"svc-shop","emoji":"🛍️","title":"Магазин внутри Telegram (Mini App)","audience":"магазины, кафе, производители","includes":["Каталог с фото и фильтрами","Корзина и оформление заказа без выхода из Telegram","Уведомления о заказах","Админка для товаров и заказов"],"term":"от 3 дней","price":"от 7 000 ₽","note":"","projectId":"taskflow"},{"id":"svc-landing","emoji":"🚀","title":"Лендинг под ключ","audience":"услуги, продукт, мероприятие","includes":["Адаптивный дизайн","Форма с отправкой заявок в Telegram","Подключение домена и хостинга","Базовая SEO-настройка"],"term":"от 2 дней","price":"от 2 500 ₽","note":"","projectId":"finly"},{"id":"svc-catalog","emoji":"🗂️","title":"Сайт-каталог с админ-панелью","audience":"производители и магазины без онлайн-оплаты","includes":["Каталог с фильтрами","Импорт товаров из XML/Excel поставщика","Автоматическая наценка","Корзина-заявка","Админ-панель"],"term":"от 3 дней","price":"от 8 000 ₽","note":"","projectId":"trofimovskie"},{"id":"svc-parser","emoji":"🔎","title":"Парсер с уведомлениями","audience":"селлеры, перекупщики, закупки","includes":["Мониторинг Авито, WB, Ozon или сайтов конкурентов","Выгрузка в Excel/Google Таблицы","Уведомления в Telegram о новых объявлениях и изменении цен"],"term":"от 1 дня","price":"от 2 000 ₽","note":"","projectId":""},{"id":"svc-ai","emoji":"🤖","title":"ИИ-консультант для бизнеса","audience":"бизнес с потоком однотипных вопросов","includes":["Ответы клиентам по вашему прайсу и FAQ 24/7","Передача сложных вопросов и заявок менеджеру","Обучение на ваших материалах"],"term":"от 3 дней","price":"от 5 000 ₽","note":"Запросы к ИИ оплачиваются отдельно по тарифу провайдера","projectId":""},{"id":"svc-layout","emoji":"🎨","title":"Вёрстка по макету Figma","audience":"дизайнеры и студии","includes":["Адаптивная вёрстка близко к макету","HTML, CSS, JS","Меню, формы и анимации","Правки без ограничений"],"term":"от 1 дня","price":"от 1 600 ₽","note":"3 пакета - до 3 блоков за 1 600 ₽, лендинг до 7 блоков за 2 400 ₽, до 3 страниц или 12 блоков за 3 600 ₽","projectId":""}],"reviews":[]}</script>
 
-    const emailLink = document.getElementById('contact-email');
-    emailLink.href = 'mailto:' + p.email;
-    document.getElementById('contact-telegram').href = p.telegram || '#';
-    document.getElementById('contact-github').href = p.github || '#';
-    document.getElementById('contact-kwork').href = p.kwork || '#';
-
-    const skillsGrid = document.getElementById('skills-grid');
-    const stackBlock = p.stackTitle ? `
-      <div class="stack-any">
-        <b>${escapeHtml(p.stackTitle)}</b>
-        <p>${escapeHtml(p.stackText || '')}</p>
-      </div>` : '';
-    const groups = Object.entries(p.skills || {}).map(([group, items]) => `
-      <div class="skill-group">
-        <h3>${escapeHtml(group)}</h3>
-        <div class="chip-row">${(items||[]).map(s=>`<span class="chip">${escapeHtml(s)}</span>`).join('')}</div>
-      </div>
-    `).join('');
-    const limits = (p.limits||[]).length ? `
-      <div class="limits">
-        <h3>Есть нюансы</h3>
-        <ul>${p.limits.map(l=>`<li>${escapeHtml(l)}</li>`).join('')}</ul>
-      </div>` : '';
-    skillsGrid.innerHTML = stackBlock + groups + limits;
-  }
-
-  function pluralProjects(n){
-    const mod10 = n % 10, mod100 = n % 100;
-    let word = 'проектов';
-    if(mod10 === 1 && mod100 !== 11) word = 'проект';
-    else if([2,3,4].includes(mod10) && ![12,13,14].includes(mod100)) word = 'проекта';
-    return `${n} ${word} в портфолио`;
-  }
-
-  function renderProjects(){
-    const grid = document.getElementById('projects-grid');
-    const projects = state.projects || [];
-    document.getElementById('stat-projects').textContent = pluralProjects(projects.length);
-    if(!projects.length){
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Проекты скоро появятся.</div>`;
-      return;
-    }
-    grid.innerHTML = projects.map((proj, i) => {
-      const images = proj.images || [];
-      let art;
-      if(images.length){
-        art = `<img src="${escapeHtml(images[0])}" alt="${escapeHtml(proj.title)}" loading="lazy">`;
-      } else {
-        const hue = hueFor(proj.title || String(i));
-        const initial = (proj.title || '?').trim().charAt(0).toUpperCase();
-        art = `<span class="card-mono" style="position:relative; z-index:1;">${escapeHtml(initial)}</span>`;
-      }
-      const artBg = images.length ? '' : `background:linear-gradient(135deg, hsl(${hueFor(proj.title||String(i))} 70% 52%), hsl(${(hueFor(proj.title||String(i))+50)%360} 70% 42%));`;
-      return `
-        <article class="card reveal" data-id="${escapeHtml(proj.id)}" tabindex="0" role="button" aria-label="Открыть подробности проекта ${escapeHtml(proj.title)}">
-          <div class="card-art" style="${artBg}">
-            <span class="card-index">${String(i+1).padStart(2,'0')}</span>
-            ${art}
-          </div>
-          <div class="card-body">
-            ${proj.badge ? `<span class="card-badge">${escapeHtml(proj.badge)}</span>` : ''}
-            <h3>${escapeHtml(proj.title)}</h3>
-            ${proj.tagline ? `<p class="card-tagline">${escapeHtml(proj.tagline)}</p>` : ''}
-            <p class="card-desc">${escapeHtml(proj.description)}</p>
-            ${images.length ? `<p class="card-more">📷 ${images.length} фото${proj.video ? ' и видео' : ''} - открыть подробнее</p>` : ''}
-            <div class="card-tags">${(proj.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
-            <div class="card-links">
-              ${proj.link ? `<a href="${escapeHtml(proj.link)}" target="_blank" rel="noopener">${escapeHtml(proj.linkLabel||'Демо')} ↗</a>` : ''}
-              ${proj.repo ? `<a href="${escapeHtml(proj.repo)}" target="_blank" rel="noopener">Код ↗</a>` : ''}
-            </div>
-          </div>
-        </article>
-      `;
-    }).join('');
-    observeReveal();
-
-    grid.querySelectorAll('.card').forEach(card=>{
-      card.addEventListener('click', ()=> openProjectModal(card.dataset.id));
-      card.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openProjectModal(card.dataset.id); }
-      });
-      const hoverPreload = ()=>{
-        const proj = (state.projects||[]).find(p=>p.id===card.dataset.id);
-        if(proj) preloadImages(proj.images||[]);
-      };
-      card.addEventListener('mouseenter', hoverPreload, {once:true});
-      card.addEventListener('focus', hoverPreload, {once:true});
-    });
-    grid.querySelectorAll('.card-links a').forEach(a=>{
-      a.addEventListener('click', (e)=> e.stopPropagation());
-    });
-  }
-
-  /* ---------- project modal ---------- */
-  const preloadedImages = new Set();
-  const isVideoSrc = u => /\.(mp4|webm)$/i.test(u || '');
-  function preloadImages(urls){
-    urls.forEach(u=>{
-      if(isVideoSrc(u) || preloadedImages.has(u)) return;
-      preloadedImages.add(u);
-      const img = new Image();
-      img.src = u;
-    });
-  }
-
-  const modalOverlay = document.getElementById('project-modal-overlay');
-  const modalImg = document.getElementById('modal-gallery-img');
-  const galleryCounter = document.getElementById('gallery-counter');
-  const galleryDots = document.getElementById('gallery-dots');
-  const galleryPrev = document.getElementById('gallery-prev');
-  const galleryNext = document.getElementById('gallery-next');
-  let modalImages = [];
-  let modalPoster = '';
-  const modalVideo = document.getElementById('modal-gallery-video');
-  let modalIndex = 0;
-
-  function openProjectModal(id){
-    const proj = (state.projects||[]).find(p=>p.id===id);
-    if(!proj) return;
-    modalImages = (proj.video ? [proj.video] : []).concat(proj.images || []);
-    modalPoster = (proj.images || [])[0] || '';
-    modalIndex = 0;
-    preloadImages(modalImages);
-
-    document.getElementById('modal-title').textContent = proj.title;
-    document.getElementById('modal-meta').textContent = proj.meta || '';
-    document.getElementById('modal-desc').innerHTML = (proj.fullDescription||[proj.description]).map(p=>`<p>${escapeHtml(p)}</p>`).join('');
-    document.getElementById('modal-features').innerHTML = (proj.features||[]).map(f=>`<li>${escapeHtml(f)}</li>`).join('');
-    document.getElementById('modal-tags').innerHTML = (proj.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('');
-    document.getElementById('modal-links').innerHTML = `
-      ${proj.link ? `<a class="btn btn-primary btn-sm" href="${escapeHtml(proj.link)}" target="_blank" rel="noopener">${escapeHtml(proj.linkLabel||'Демо')} ↗</a>` : ''}
-      ${proj.download ? `<a class="btn btn-ghost btn-sm" href="${escapeHtml(proj.download)}" target="_blank" rel="noopener">⬇ Скачать приложение</a>` : ''}
-      ${proj.repo ? `<a class="btn btn-ghost btn-sm" href="${escapeHtml(proj.repo)}" target="_blank" rel="noopener">Код ↗</a>` : ''}
-    `;
-
-    const hasGallery = modalImages.length > 0;
-    document.getElementById('modal-gallery').hidden = !hasGallery;
-    if(hasGallery) renderGallery();
-
-    modalOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeProjectModal(){
-    modalVideo.pause();
-    modalOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  const reduceMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
-
-  function paintGalleryChrome(){
-    galleryCounter.textContent = (isVideoSrc(modalImages[modalIndex]) ? '▶ видео · ' : '') + (modalIndex+1) + ' / ' + modalImages.length;
-    const showNav = modalImages.length > 1;
-    galleryPrev.hidden = !showNav; galleryNext.hidden = !showNav;
-    galleryDots.innerHTML = showNav ? modalImages.map((_,i)=>`<span class="gallery-dot${i===modalIndex?' active':''}" data-i="${i}"></span>`).join('') : '';
-    galleryDots.querySelectorAll('.gallery-dot').forEach(dot=>{
-      dot.addEventListener('click', ()=>{
-        const target = Number(dot.dataset.i);
-        if(target === modalIndex) return;
-        goToImage(target, target > modalIndex ? 1 : -1);
-      });
-    });
-  }
-
-  function showSlide(src, alt){
-    if(isVideoSrc(src)){
-      modalImg.hidden = true;
-      modalVideo.hidden = false;
-      modalVideo.poster = modalPoster;
-      modalVideo.src = src;
-    } else {
-      modalVideo.pause();
-      modalVideo.hidden = true;
-      modalImg.hidden = false;
-      modalImg.src = src;
-      modalImg.alt = alt;
-    }
-  }
-
-  function renderGallery(direction){
-    const src = modalImages[modalIndex];
-    const alt = document.getElementById('modal-title').textContent + ' - фото ' + (modalIndex+1);
-    const layers = [modalImg, modalVideo];
-
-    if(!direction || reduceMotionQuery.matches){
-      showSlide(src, alt);
-      paintGalleryChrome();
-      return;
-    }
-
-    // slide + fade the outgoing frame out, then swap and slide the new one in
-    layers.forEach(el=>{ el.style.transform = `translateX(${direction * -28}px)`; el.style.opacity = '0'; });
-    setTimeout(()=>{
-      layers.forEach(el=>{ el.style.transition = 'none'; el.style.transform = `translateX(${direction * 28}px)`; });
-      showSlide(src, alt);
-      void modalImg.offsetWidth; // force reflow before re-enabling transition
-      layers.forEach(el=>{ el.style.transition = ''; el.style.transform = 'translateX(0)'; el.style.opacity = '1'; });
-      paintGalleryChrome();
-    }, 220);
-  }
-
-  function goToImage(index, direction){
-    modalIndex = index;
-    renderGallery(direction);
-  }
-  function galleryStep(delta){
-    if(!modalImages.length) return;
-    goToImage((modalIndex + delta + modalImages.length) % modalImages.length, delta > 0 ? 1 : -1);
-  }
-
-  document.getElementById('modal-close').addEventListener('click', closeProjectModal);
-  modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) closeProjectModal(); });
-  galleryPrev.addEventListener('click', ()=> galleryStep(-1));
-  galleryNext.addEventListener('click', ()=> galleryStep(1));
-  document.addEventListener('keydown', (e)=>{
-    if(!modalOverlay.classList.contains('open')) return;
-    if(e.key === 'Escape') closeProjectModal();
-    if(e.key === 'ArrowLeft') galleryStep(-1);
-    if(e.key === 'ArrowRight') galleryStep(1);
-  });
-
-  /* ---------- services ---------- */
-  const nb = v => String(v ?? '').replace(/(\d) (?=\d)/g, '$1\u00a0').replace(/ (?=\u20bd)/g, '\u00a0');
-
-  function renderServices(){
-    const section = document.getElementById('services');
-    const navItem = document.getElementById('nav-services');
-    const grid = document.getElementById('services-grid');
-    const list = Array.isArray(state.services) ? state.services.filter(x => x && x.title) : [];
-    section.hidden = !list.length;
-    navItem.hidden = !list.length;
-    if(!list.length){ grid.innerHTML = ''; return; }
-    const known = new Set((state.projects || []).map(p => p.id));
-    grid.innerHTML = list.map(x => {
-      const inc = (Array.isArray(x.includes) ? x.includes : []).filter(Boolean);
-      const linked = x.projectId && known.has(x.projectId);
-      const meta = (x.price || x.term) ? `
-        <div class="svc-meta">
-          ${x.price ? `<div class="svc-price"><small>Цена</small><b>${escapeHtml(nb(x.price))}</b></div>` : ''}
-          ${x.term ? `<div><small>Срок</small><b>${escapeHtml(nb(x.term))}</b></div>` : ''}
-        </div>` : '';
-      return `
-        <article class="svc reveal">
-          <div class="svc-top">
-            ${x.emoji ? `<span class="svc-emoji" aria-hidden="true">${escapeHtml(x.emoji)}</span>` : ''}
-            <h3>${escapeHtml(x.title)}</h3>
-          </div>
-          <div class="svc-main">
-            ${x.audience ? `<div><span class="svc-label">Для кого</span><p class="svc-for">${escapeHtml(x.audience)}</p></div>` : ''}
-            ${inc.length ? `<div><span class="svc-label">Что входит</span><ul class="feature-list">${inc.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></div>` : ''}
-            ${x.note ? `<p class="svc-note">${escapeHtml(x.note)}</p>` : ''}
-            ${linked ? `<button type="button" class="svc-example" data-project="${escapeHtml(x.projectId)}">Пример работы →</button>` : ''}
-          </div>
-          ${meta}
-          <button type="button" class="btn btn-primary svc-cta" data-title="${escapeHtml(x.title)}">Обсудить</button>
-        </article>`;
-    }).join('');
-  }
-
-  function goToLead(prefill){
-    const form = document.getElementById('lead-form');
-    const ta = document.getElementById('lead-message');
-    if(prefill){
-      const cur = ta.value.trim();
-      ta.value = (!cur || cur.startsWith('Интересует:')) ? prefill : ta.value.replace(/\s+$/, '') + '\n' + prefill;
-    }
-    form.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'center'});
-    setTimeout(() => {
-      const target = prefill ? ta : document.getElementById('lead-name');
-      target.focus({preventScroll: true});
-      if(prefill) ta.setSelectionRange(ta.value.length, ta.value.length);
-    }, reduceMotion ? 0 : 500);
-  }
-
-  document.getElementById('services-grid').addEventListener('click', e => {
-    const ex = e.target.closest('.svc-example');
-    if(ex){ openProjectModal(ex.dataset.project); return; }
-    const cta = e.target.closest('.svc-cta');
-    if(cta) goToLead('Интересует: ' + cta.dataset.title + '. ');
-  });
-  document.getElementById('services-custom-btn').addEventListener('click', () => goToLead(''));
-
-  function renderAll(){
-    renderProfile();
-    renderServices();
-    renderProjects();
-    observeReveal();
-  }
-
-  /* ---------- scroll reveal ---------- */
-  let observer;
-  function observeReveal(){
-    if(!('IntersectionObserver' in window)){
-      document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in-view'));
-      return;
-    }
-    if(observer) observer.disconnect();
-    observer = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in-view'); observer.unobserve(e.target); } });
-    }, {threshold:.15});
-    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-  }
-
-  /* ---------- cursor spotlight ---------- */
-  const spot = document.getElementById('spotlight');
-  const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(canHover && !reduceMotion){
-    window.addEventListener('pointermove', (e)=>{
-      spot.style.setProperty('--x', e.clientX+'px');
-      spot.style.setProperty('--y', e.clientY+'px');
-      spot.style.opacity = '1';
-    }, {passive:true});
-  } else {
-    spot.remove();
-  }
-
-  /* ---------- mobile nav ---------- */
-  const navToggle = document.getElementById('nav-toggle');
-  const navLinksEl = document.getElementById('nav-links');
-  navToggle.addEventListener('click', ()=>{
-    const isOpen = navLinksEl.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-  navLinksEl.querySelectorAll('a').forEach(a=>{
-    a.addEventListener('click', ()=>{
-      navLinksEl.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  /* ---------- lead form ---------- */
-  // Заполните после регистрации на formspree.io (Settings → New Form → Get form endpoint), например:
-  // "https://formspree.io/f/abcdwxyz"
-  const FORMSPREE_ENDPOINT = "https://formspree.io/f/myeyrbob";
-
-  const leadForm = document.getElementById('lead-form');
-  const leadStatus = document.getElementById('lead-status');
-
-  if(FORMSPREE_ENDPOINT){
-    leadForm.action = FORMSPREE_ENDPOINT;
-    leadForm.method = 'POST';
-  }
-
-  leadForm.addEventListener('submit', (e)=>{
-    const name = document.getElementById('lead-name').value.trim();
-    const contact = document.getElementById('lead-contact').value.trim();
-    const message = document.getElementById('lead-message').value.trim();
-
-    if(FORMSPREE_ENDPOINT){
-      // Настоящая отправка: форма уходит в скрытый iframe, страница не перезагружается
-      // и почта посетителя не открывается - заявка сразу приходит вам на email.
-      leadStatus.textContent = 'Отправляем…';
-      setTimeout(()=>{
-        leadStatus.textContent = 'Спасибо! Заявка отправлена - отвечу в течение дня.';
-        leadForm.reset();
-      }, 900);
-      return; // не отменяем submit - форма должна реально уйти на Formspree
-    }
-
-    // Пока Formspree не подключён - резервный вариант через mailto
-    e.preventDefault();
-    const subject = 'Заявка с сайта от ' + name;
-    const body = `Имя: ${name}\nКонтакт: ${contact}\n\nЗадача:\n${message}`;
-    const mailto = 'mailto:' + state.profile.email +
-      '?subject=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(body);
-    window.location.href = mailto;
-    leadStatus.textContent = 'Открываем почтовый клиент - проверьте, что письмо ушло.';
-  });
-
-  renderAll();
-})();
-</script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

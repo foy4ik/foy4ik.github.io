@@ -118,6 +118,7 @@
     <div class="tabs">
       <button class="tab active" data-tab="projects">Проекты</button>
       <button class="tab" data-tab="services">Услуги</button>
+      <button class="tab" data-tab="reviews">Отзывы</button>
       <button class="tab" data-tab="profile">Профиль</button>
     </div>
 
@@ -175,9 +176,29 @@
       </form>
     </div>
 
+    <div id="tab-reviews" hidden>
+      <p class="hint" style="margin-top:0;">Отзывы показываются на сайте только если они здесь есть. Добавляйте только настоящие: с разрешения автора.</p>
+      <div id="review-list"></div>
+      <button class="btn btn-ghost btn-sm" id="add-review-btn" style="width:100%;">+ Добавить отзыв</button>
+      <form id="review-form" hidden>
+        <input type="hidden" id="rv-id">
+        <div class="field"><label for="rv-text">Текст отзыва</label><textarea id="rv-text" style="min-height:110px;" required></textarea></div>
+        <div class="field-row">
+          <div class="field"><label for="rv-author">Автор (имя)</label><input id="rv-author"></div>
+          <div class="field"><label for="rv-role">Кто это (должность, компания)</label><input id="rv-role"></div>
+        </div>
+        <div class="field"><label for="rv-link">Ссылка на источник (необязательно, например страница отзыва на бирже)</label><input id="rv-link" placeholder="https://"></div>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn btn-primary btn-sm">Сохранить отзыв</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="rv-cancel">Отмена</button>
+        </div>
+      </form>
+    </div>
+
     <div id="tab-profile" hidden>
       <div class="field"><label for="prof-name">Имя / ник</label><input id="prof-name"></div>
       <div class="field"><label for="prof-role">Плашка над заголовком</label><input id="prof-role"></div>
+      <div class="field"><label for="prof-hero">Заголовок на главной (каждая строка с новой, последняя выделяется цветом)</label><textarea id="prof-hero" style="min-height:90px;"></textarea></div>
       <div class="field"><label for="prof-tagline">Подзаголовок на главной</label><input id="prof-tagline"></div>
       <div class="field"><label for="prof-chip">Плашка в шапке 1</label><input id="prof-chip"></div>
       <div class="field"><label for="prof-chip2">Плашка в шапке 2</label><input id="prof-chip2"></div>
@@ -277,9 +298,10 @@
     state = site.data;
     state.projects = state.projects || [];
     state.services = Array.isArray(state.services) ? state.services : [];
+    state.reviews = Array.isArray(state.reviews) ? state.reviews : [];
     setDirty(false);
     $('login-view').hidden = true; $('panel-view').hidden = false; $('bar').hidden = false; $('logout').hidden = false;
-    renderList(); renderServiceList(); fillProfile(); setStatus('');
+    renderList(); renderServiceList(); renderReviewList(); fillProfile(); setStatus('');
   }
   $('login-form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -316,7 +338,7 @@
   document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    ['projects', 'services', 'profile'].forEach(n => { $('tab-' + n).hidden = tab.dataset.tab !== n; });
+    ['projects', 'services', 'reviews', 'profile'].forEach(n => { $('tab-' + n).hidden = tab.dataset.tab !== n; });
     if(tab.dataset.tab === 'services') renderServiceList();
   }));
 
@@ -459,8 +481,64 @@
     setDirty(true); closeServiceForm(); renderServiceList();
   });
 
+  /* ---------- reviews ---------- */
+  const rForm = $('review-form'), rAdd = $('add-review-btn');
+  function renderReviewList(){
+    const rs = state.reviews;
+    $('review-list').innerHTML = rs.length ? rs.map((x, i) => `
+      <div class="row" data-id="${esc(x.id)}">
+        <div class="info"><b>${esc(x.author || 'Без имени')}</b><span>${esc((x.text || '').slice(0, 70))}${(x.text || '').length > 70 ? '...' : ''}</span></div>
+        <div class="actions">
+          <button type="button" class="icon-btn" data-act="up" title="Выше" ${i === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" class="icon-btn" data-act="down" title="Ниже" ${i === rs.length - 1 ? 'disabled' : ''}>▼</button>
+          <button type="button" class="icon-btn" data-act="edit" title="Редактировать">✎</button>
+          <button type="button" class="icon-btn danger" data-act="del" title="Удалить">✕</button>
+        </div>
+      </div>`).join('') : '<p style="color:var(--text-dim); font-size:14px;">Отзывов пока нет, раздел на сайте скрыт.</p>';
+  }
+  $('review-list').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]'); if(!btn) return;
+    const id = btn.closest('.row').dataset.id;
+    const i = state.reviews.findIndex(x => x.id === id); if(i < 0) return;
+    const act = btn.dataset.act;
+    if(act === 'edit') openReviewForm(state.reviews[i]);
+    else if(act === 'del'){
+      if(confirm('Удалить отзыв?')){ state.reviews.splice(i, 1); setDirty(true); renderReviewList(); }
+    } else {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if(j >= 0 && j < state.reviews.length){ [state.reviews[i], state.reviews[j]] = [state.reviews[j], state.reviews[i]]; setDirty(true); renderReviewList(); }
+    }
+  });
+  function openReviewForm(x){
+    rForm.hidden = false; rAdd.hidden = true;
+    $('rv-id').value = x ? x.id : '';
+    $('rv-text').value = x ? x.text || '' : '';
+    $('rv-author').value = x ? x.author || '' : '';
+    $('rv-role').value = x ? x.role || '' : '';
+    $('rv-link').value = x ? x.link || '' : '';
+    rForm.scrollIntoView({behavior:'smooth', block:'start'});
+    $('rv-text').focus({preventScroll:true});
+  }
+  function closeReviewForm(){ rForm.hidden = true; rAdd.hidden = false; rForm.reset(); }
+  rAdd.addEventListener('click', () => openReviewForm(null));
+  $('rv-cancel').addEventListener('click', closeReviewForm);
+  rForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('rv-id').value;
+    const data = {text: $('rv-text').value.trim(), author: $('rv-author').value.trim(), role: $('rv-role').value.trim(), link: $('rv-link').value.trim()};
+    if(!data.text) return;
+    if(id){
+      const i = state.reviews.findIndex(x => x.id === id);
+      if(i > -1) state.reviews[i] = Object.assign({}, state.reviews[i], data);
+    } else {
+      data.id = 'rv-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      state.reviews.push(data);
+    }
+    setDirty(true); closeReviewForm(); renderReviewList();
+  });
+
   /* ---------- profile ---------- */
-  const P = {name:'prof-name', role:'prof-role', tagline:'prof-tagline', bio:'prof-bio', riskLine:'prof-risk', location:'prof-location',
+  const P = {name:'prof-name', role:'prof-role', heroTitle:'prof-hero', tagline:'prof-tagline', bio:'prof-bio', riskLine:'prof-risk', location:'prof-location',
     available:'prof-available', email:'prof-email', telegram:'prof-telegram', github:'prof-github', kwork:'prof-kwork',
     heroChip:'prof-chip', heroChip2:'prof-chip2', stackTitle:'prof-stack-title', stackText:'prof-stack-text'};
   function fillProfile(){
@@ -484,7 +562,7 @@
   /* ---------- publish ---------- */
   function setStatus(msg, kind){ const s = $('status'); s.textContent = msg || ''; s.className = kind || ''; }
   $('publish-btn').addEventListener('click', async () => {
-    if(!form.hidden || !sForm.hidden){ setStatus('Сначала сохраните или отмените открытую форму.', 'err'); return; }
+    if(!form.hidden || !sForm.hidden || !rForm.hidden){ setStatus('Сначала сохраните или отмените открытую форму.', 'err'); return; }
     applyProfile();
     const btn = $('publish-btn'); btn.disabled = true; setStatus('Публикую…');
     try{
