@@ -53,6 +53,24 @@ function build(p, index) {
   </article>`;
 }
 
+/* Reveal blocks as they enter the view. IntersectionObserver instead of ScrollTrigger: the content is swapped
+   while the overlay stays open ("next"), and a jump of scrollTop must never leave blocks stuck at opacity 0. */
+let io = null;
+const stopReveals = () => { if (io) { io.disconnect(); io = null; } };
+function revealOnScroll(sc) {
+  stopReveals();
+  const nodes = $$('.feats li, .case-tech li, .shot, .case-text, .case-next, .needs li, .phone-fig, .tb-fig, .tpl-price-row, .case-links', sc);
+  gsap.set(nodes, { y: 46, opacity: 0 });
+  io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      gsap.to(e.target, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', clearProps: 'opacity,transform' });
+    });
+  }, { root: sc, rootMargin: '0px 0px -6% 0px', threshold: 0.01 });
+  nodes.forEach((n) => io.observe(n));
+}
+
 function animateIn(first, evt) {
   const el = caseEl();
   if (!motionOK()) return;
@@ -65,9 +83,7 @@ function animateIn(first, evt) {
   gsap.from('.case-hero > *', { y: 44, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: first ? 0.35 : 0.05 });
   ctx = gsap.context(() => {
     const sc = scroller();
-    $$('.feats li, .case-tech li, .shot, .case-text, .case-next, .needs li, .phone-fig, .tb-fig, .tpl-price-row, .case-links', sc).forEach((n) => {
-      gsap.from(n, { y: 46, opacity: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { scroller: sc, trigger: n, start: 'top 94%', once: true } });
-    });
+    revealOnScroll(sc);
     /* template pages: screenshots pan inside their frames while scrolling, hero objects drift at different speeds */
     $$('[data-pan]', sc).forEach((view) => {
       const im = $('img', view);
@@ -97,6 +113,7 @@ export function open(id, evt, push = true, kind = 'case') {
   const el = caseEl();
   const first = !el.classList.contains('open');
   if (ctx) { ctx.revert(); ctx = null; }
+  stopReveals();
   scroller().innerHTML = tpl ? buildTemplate(p, list) : build(p, list.indexOf(p));
   scroller().scrollTop = 0;
   $('#case-count').textContent = `${pad(list.indexOf(p) + 1)} / ${pad(list.length)}`;
@@ -135,6 +152,7 @@ export function close() {
   const el = caseEl();
   if (!el.classList.contains('open')) return;
   if (ctx) { ctx.revert(); ctx = null; }
+  stopReveals();
   currentKey = null; pushes = 0; deepStart = false;
   if (!motionOK()) { finishClose(); return; }
   /* finish once, whichever comes first: the tween or a safety timer (background tabs pause rAF) */
