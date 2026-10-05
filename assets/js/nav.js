@@ -2,7 +2,7 @@
 import { $, $$, app, mq, scrollToEl, state, pad, motionOK } from './core.js';
 import { freeze, unfreeze } from './scroll.js';
 
-const ORDER = ['hero', 'services', 'projects', 'about', 'process', 'reviews', 'contact'];
+const ORDER = ['hero', 'services', 'templates', 'projects', 'about', 'process', 'reviews', 'contact'];
 
 export function render() {
   const p = state.profile;

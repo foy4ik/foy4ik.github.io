@@ -36,6 +36,7 @@
     <nav aria-label="Основная навигация">
       <ul class="nav-links" id="nav-links">
         <li><a href="#services" data-sec="services">Услуги</a></li>
+        <li><a href="#templates" data-sec="templates">Шаблоны</a></li>
         <li><a href="#projects" data-sec="projects">Проекты</a></li>
         <li><a href="#about" data-sec="about">О себе</a></li>
         <li id="nav-reviews" hidden><a href="#reviews" data-sec="reviews">Отзывы</a></li>
@@ -47,7 +48,7 @@
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-  <a href="#services">Услуги</a><a href="#projects">Проекты</a><a href="#about">О себе</a><a href="#reviews" id="mm-reviews" hidden>Отзывы</a><a href="#contact">Контакты</a>
+  <a href="#services">Услуги</a><a href="#templates">Шаблоны</a><a href="#projects">Проекты</a><a href="#about">О себе</a><a href="#reviews" id="mm-reviews" hidden>Отзывы</a><a href="#contact">Контакты</a>
 </div>
 
 <main id="main">
@@ -111,14 +112,34 @@
     </div>
   </section>
 
+  <!-- TEMPLATES -->
+  <section class="section over tpl-sec" id="templates" aria-labelledby="tpl-title" style="border-radius:0; border-top:0;">
+    <span class="xr-label">section#templates / tilt tiles + case view</span>
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="eyebrow" data-reveal>02 / Шаблоны</p>
+        <h2 class="title" id="tpl-title" data-split>Готовые шаблоны ботов, мини-приложений и сайтов</h2>
+        <p class="sec-sub" data-reveal>Это уже собранные решения: можно забрать исходники или заказать установку под ключ. Нажмите на плашку, чтобы увидеть, что внутри</p>
+      </header>
+      <div class="tpl-grid" id="tpl-grid"></div>
+      <div class="svc-custom" data-reveal>
+        <div>
+          <h3>Не нашли подходящий?</h3>
+          <p>Соберу решение под вашу задачу с нуля - оценю индивидуально</p>
+        </div>
+        <button type="button" class="btn btn-accent" id="tpl-custom-btn" data-magnetic>Обсудить задачу <span class="arr">→</span></button>
+      </div>
+    </div>
+  </section>
+
   <!-- PROJECTS -->
   <section class="projects" id="projects" aria-labelledby="proj-title">
     <span class="xr-label">section#projects / pin + horizontal</span>
     <div class="proj-pin" id="proj-pin">
       <div class="proj-track" id="proj-track">
         <div class="proj-intro" id="proj-intro">
-          <p class="eyebrow">02 / Проекты</p>
-          <h2 class="title" id="proj-title" style="margin-top:16px;">Каждый проект - отдельная история, а не шаблон.</h2>
+          <p class="eyebrow">03 / Проекты</p>
+          <h2 class="title" id="proj-title" style="margin-top:16px;">Каждый проект - отдельная история.</h2>
           <p class="sec-sub">Крупные кейсы: кликните по проекту, чтобы открыть его целиком.</p>
           <p class="proj-hint"><i></i>Скролльте вниз</p>
         </div>
@@ -133,7 +154,7 @@
     <span class="xr-label">section#about / stack preview</span>
     <div class="wrap about-grid">
       <div class="about-copy">
-        <p class="eyebrow" data-reveal>03 / О себе</p>
+        <p class="eyebrow" data-reveal>04 / О себе</p>
         <h2 class="title" id="about-title" style="margin-top:16px;" data-split>Я превращаю идеи в работающие digital-продукты.</h2>
         <div class="about-bio" id="about-bio" data-reveal></div>
         <ol class="steps" id="about-steps" data-reveal></ol>
@@ -141,7 +162,7 @@
         <div class="stats" id="about-stats" data-reveal>
           <div><b id="stat-projects">0 проектов в портфолио</b><span>включая выполненные заказы</span></div>
           <div><b>Claude Code в каждом проекте</b><span>весь код в портфолио написан с его помощью</span></div>
-          <div><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов и шаблонов</span></div>
+          <div><b>Сайты, боты, desktop, iOS/Android</b><span>с нуля, без конструкторов</span></div>
           <div><b>Оплата после демонстрации</b><span>показываю готовую работу, файлы передаю только после оплаты</span></div>
         </div>
       </div>
@@ -161,7 +182,7 @@
     <span class="xr-label">section#process / terminal sequence</span>
     <div class="wrap proc-grid">
       <div>
-        <p class="eyebrow" data-reveal>04 / Процесс</p>
+        <p class="eyebrow" data-reveal>05 / Процесс</p>
         <h2 class="title" id="proc-title" style="margin-top:16px;" data-split>От идеи до работающего сайта.</h2>
         <div class="stages" id="stages" role="list"></div>
       </div>
@@ -177,7 +198,7 @@
     <span class="xr-label">section#reviews / drag stack</span>
     <div class="wrap">
       <header class="sec-head">
-        <p class="eyebrow" data-reveal>05 / Отзывы</p>
+        <p class="eyebrow" data-reveal>06 / Отзывы</p>
         <h2 class="title" id="rev-title" data-split>Что говорят клиенты.</h2>
       </header>
       <div class="rev-wrap">
@@ -191,7 +212,7 @@
   <section class="section over contact" id="contact" aria-labelledby="contact-title" style="border-radius:0; border-top:0; padding-top:0;">
     <span class="xr-label">section#contact / keyword tags + formspree</span>
     <div class="wrap">
-      <p class="eyebrow" data-reveal>06 / Контакты</p>
+      <p class="eyebrow" data-reveal>07 / Контакты</p>
       <h2 class="title" id="contact-title" style="margin-top:16px;" data-split>Есть идея?</h2>
       <p class="sec-sub" data-reveal>Расскажите, что нужно, и я предложу решение, срок и цену.</p>
       <div class="idea" id="idea" data-reveal>

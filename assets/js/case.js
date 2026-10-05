@@ -1,12 +1,14 @@
 /* Project case: immersive full-screen view with its own route (#/case/<id>) */
 import { $, $$, esc, state, pad, app, projectById, goToLead, motionOK, nb } from './core.js';
 import { freeze, unfreeze } from './scroll.js';
+import { TEMPLATES, templateById } from './templates-data.js';
+import { build as buildTemplate } from './template-view.js';
 
 const caseEl = () => $('#case');
 const scroller = () => $('#case-scroll');
 let ctx = null;
 let lastFocus = null;
-let currentId = null;
+let currentKey = null; // 'case/<id>' or 'tpl/<id>'
 let pushes = 0;       // history entries added while the case view is open
 let deepStart = false; // opened straight from a #/case/... link
 const background = () => ['#main', '#nav', '.foot', '#mobile-menu'].map((s) => $(s)).filter(Boolean);
@@ -46,7 +48,7 @@ function build(p, index) {
     ${rest.length ? `<section class="case-block"><p class="eyebrow">${no()} / Экраны</p><h3 class="t">Интерфейс</h3><div class="shots" style="margin-top:30px">${rest.map((s, i) => `<figure class="shot"><img src="${esc(s)}" alt="${esc(p.title + ', экран ' + (i + 2))}" loading="lazy" decoding="async"></figure>`).join('')}</div></section>` : ''}
     <footer class="case-end">
       <div class="case-links">${links}<button type="button" class="btn btn-ghost" data-lead="${esc(p.title)}">Обсудить такой проект</button></div>
-      ${list.length > 1 ? `<a class="case-next" href="#/case/${esc(next.id)}" data-next="${esc(next.id)}"><small>Следующий проект</small><b>${esc(next.title)}</b></a>` : ''}
+      ${list.length > 1 ? `<a class="case-next" href="#/case/${esc(next.id)}" data-next="${esc(next.id)}" data-kind="case"><small>Следующий проект</small><b>${esc(next.title)}</b></a>` : ''}
     </footer>
   </article>`;
 }
@@ -63,28 +65,49 @@ function animateIn(first, evt) {
   gsap.from('.case-hero > *', { y: 44, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: first ? 0.35 : 0.05 });
   ctx = gsap.context(() => {
     const sc = scroller();
-    $$('.feats li, .case-tech li, .shot, .case-text, .case-next', sc).forEach((n) => {
+    $$('.feats li, .case-tech li, .shot, .case-text, .case-next, .needs li, .phone-fig, .tb-fig, .tpl-price-row, .case-links', sc).forEach((n) => {
       gsap.from(n, { y: 46, opacity: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { scroller: sc, trigger: n, start: 'top 94%', once: true } });
     });
+    /* template pages: screenshots pan inside their frames while scrolling, hero objects drift at different speeds */
+    $$('[data-pan]', sc).forEach((view) => {
+      const im = $('img', view);
+      if (!im) return;
+      gsap.fromTo(im, { y: 0 }, {
+        y: () => -Math.max(0, im.offsetHeight - view.clientHeight), ease: 'none',
+        scrollTrigger: view.closest('.case-hero')
+          ? { scroller: sc, start: 0, end: () => '+=' + innerHeight, scrub: 0.6, invalidateOnRefresh: true } /* first screen: starts at the top of the shot */
+          : { scroller: sc, trigger: view, start: 'top 92%', end: 'bottom 8%', scrub: 0.6, invalidateOnRefresh: true },
+      });
+    });
+    $$('[data-par]', sc).forEach((el) => {
+      gsap.to(el, { y: () => +el.dataset.par * -140, ease: 'none', scrollTrigger: { scroller: sc, trigger: '.case-hero', start: 'top top', end: 'bottom top', scrub: 0.8 } });
+    });
+    const stg = $$('.tpl-stage .phone, .tts-ic, .tts-chips', sc);
+    if (stg.length) gsap.from(stg, { y: 90, opacity: 0, duration: 1.1, stagger: 0.09, ease: 'power3.out', delay: first ? 0.55 : 0.2 });
   }, sc());
 }
 const sc = () => scroller();
 
-export function open(id, evt, push = true) {
-  const p = projectById(id);
+export function open(id, evt, push = true, kind = 'case') {
+  const tpl = kind === 'tpl';
+  const p = tpl ? templateById(id) : projectById(id);
   if (!p) return;
+  const list = tpl ? TEMPLATES : state.projects;
+  const key = kind + '/' + id;
   const el = caseEl();
   const first = !el.classList.contains('open');
   if (ctx) { ctx.revert(); ctx = null; }
-  scroller().innerHTML = build(p, state.projects.indexOf(p));
+  scroller().innerHTML = tpl ? buildTemplate(p, list) : build(p, list.indexOf(p));
   scroller().scrollTop = 0;
-  $('#case-count').textContent = `${pad(state.projects.indexOf(p) + 1)} / ${pad(state.projects.length)}`;
-  if (push && currentId !== id) {
-    if (deepStart) history.replaceState({ case: id, n: 0 }, '', '#/case/' + id);
-    else { pushes += 1; history.pushState({ case: id, n: pushes }, '', '#/case/' + id); }
+  $('#case-count').textContent = `${pad(list.indexOf(p) + 1)} / ${pad(list.length)}`;
+  $('#case-back').textContent = tpl ? '← Все шаблоны' : '← Все проекты';
+  $('#case-close').setAttribute('aria-label', tpl ? 'Закрыть шаблон' : 'Закрыть проект');
+  if (push && currentKey !== key) {
+    if (deepStart) history.replaceState({ view: key, n: 0 }, '', '#/' + key);
+    else { pushes += 1; history.pushState({ view: key, n: pushes }, '', '#/' + key); }
   }
-  currentId = id;
-  document.title = `${p.title} - ${state.profile.name || 'foy4ik'}`;
+  currentKey = key;
+  document.title = tpl ? `${p.name} - шаблон - ${state.profile.name || 'foy4ik'}` : `${p.title} - ${state.profile.name || 'foy4ik'}`;
   if (first) {
     lastFocus = document.activeElement;
     freeze();
@@ -112,7 +135,7 @@ export function close() {
   const el = caseEl();
   if (!el.classList.contains('open')) return;
   if (ctx) { ctx.revert(); ctx = null; }
-  currentId = null; pushes = 0; deepStart = false;
+  currentKey = null; pushes = 0; deepStart = false;
   if (!motionOK()) { finishClose(); return; }
   /* finish once, whichever comes first: the tween or a safety timer (background tabs pause rAF) */
   let done = false;
@@ -123,29 +146,31 @@ export function close() {
 
 function closeViaHistory() {
   if (pushes > 0) { const n = pushes; pushes = 0; history.go(-n); }
-  else { close(); history.replaceState(null, '', location.pathname + location.search + '#projects'); }
+  else { const home = currentKey && currentKey.startsWith('tpl/') ? '#templates' : '#projects'; close(); history.replaceState(null, '', location.pathname + location.search + home); }
 }
 
 function fromHash() {
-  const m = /^#\/case\/([\w-]+)$/.exec(location.hash);
-  return m ? m[1] : null;
+  const m = /^#\/(case|tpl)\/([\w-]+)$/.exec(location.hash);
+  return m ? { kind: m[1], id: m[2] } : null;
 }
+const exists = (v) => v && (v.kind === 'tpl' ? templateById(v.id) : projectById(v.id));
 
 export function render() {
-  app.openCase = (id, evt) => open(id, evt, true);
+  app.openCase = (id, evt) => open(id, evt, true, 'case');
+  app.openTemplate = (id, evt) => open(id, evt, true, 'tpl');
   const el = caseEl();
   el.addEventListener('click', (e) => {
     if (e.target.closest('#case-back') || e.target.closest('#case-close')) { closeViaHistory(); return; }
     const lead = e.target.closest('[data-lead]');
-    if (lead) { closeViaHistory(); setTimeout(() => goToLead('Интересует: проект как ' + lead.dataset.lead + '. '), 650); return; }
+    if (lead) { closeViaHistory(); const text = lead.dataset.prefill || ('Интересует: проект как ' + lead.dataset.lead + '. '); setTimeout(() => goToLead(text), 650); return; }
     const nx = e.target.closest('[data-next]');
-    if (nx) { e.preventDefault(); open(nx.dataset.next, e, true); }
+    if (nx) { e.preventDefault(); open(nx.dataset.next, e, true, nx.dataset.kind || 'case'); }
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el.classList.contains('open')) closeViaHistory(); });
-  window.addEventListener('popstate', () => { const id = fromHash(); if (id) { pushes = (history.state && history.state.n) || 0; open(id, null, false); } else close(); });
+  window.addEventListener('popstate', () => { const v = fromHash(); if (exists(v)) { pushes = (history.state && history.state.n) || 0; open(v.id, null, false, v.kind); } else close(); });
 }
 
 export function animate() {
-  const id = fromHash();
-  if (id && projectById(id)) { deepStart = true; setTimeout(() => open(id, null, false), 400); }
+  const v = fromHash();
+  if (exists(v)) { deepStart = true; setTimeout(() => open(v.id, null, false, v.kind), 400); }
 }
