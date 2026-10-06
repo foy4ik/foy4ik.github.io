@@ -55,8 +55,117 @@ export const TEMPLATES = [
       "админка",
       "статистика"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/booking-bot/01.webp",
+                "alt": "Клиент: /start, главное меню",
+                "w": 720,
+                "h": 1010
+          },
+          {
+                "src": "images/templates/booking-bot/02.webp",
+                "alt": "Клиент: выбор услуги (цена и длительность на кнопках)",
+                "w": 720,
+                "h": 1074
+          },
+          {
+                "src": "images/templates/booking-bot/03.webp",
+                "alt": "Клиент: выбор мастера или «любого свободного»",
+                "w": 720,
+                "h": 982
+          },
+          {
+                "src": "images/templates/booking-bot/04.webp",
+                "alt": "Клиент: календарь, дни без свободного времени неактивны",
+                "w": 720,
+                "h": 1080
+          },
+          {
+                "src": "images/templates/booking-bot/05.webp",
+                "alt": "Клиент: свободное время на выбранный день",
+                "w": 720,
+                "h": 624
+          },
+          {
+                "src": "images/templates/booking-bot/06.webp",
+                "alt": "Клиент: сводка перед подтверждением",
+                "w": 720,
+                "h": 744
+          },
+          {
+                "src": "images/templates/booking-bot/07.webp",
+                "alt": "Клиент: запись оформлена",
+                "w": 720,
+                "h": 912
+          },
+          {
+                "src": "images/templates/booking-bot/08.webp",
+                "alt": "Администратор получает уведомление о новой записи",
+                "w": 720,
+                "h": 674
+          },
+          {
+                "src": "images/templates/booking-bot/09.webp",
+                "alt": "Клиент: «Мои записи» с отменой и переносом",
+                "w": 720,
+                "h": 626
+          },
+          {
+                "src": "images/templates/booking-bot/10.webp",
+                "alt": "Клиент: напоминание за 24 часа с кнопками",
+                "w": 720,
+                "h": 750
+          },
+          {
+                "src": "images/templates/booking-bot/11.webp",
+                "alt": "Клиент: оценка 5 - ссылка на отзывы",
+                "w": 720,
+                "h": 600
+          },
+          {
+                "src": "images/templates/booking-bot/12.webp",
+                "alt": "Админка: главное меню (/admin)",
+                "w": 720,
+                "h": 934
+          },
+          {
+                "src": "images/templates/booking-bot/13.webp",
+                "alt": "Админка: записи на неделю (✅ - клиент подтвердил)",
+                "w": 720,
+                "h": 1300
+          },
+          {
+                "src": "images/templates/booking-bot/14.webp",
+                "alt": "Админка: карточка услуги (длительность, цена, мастера)",
+                "w": 720,
+                "h": 976
+          },
+          {
+                "src": "images/templates/booking-bot/15.webp",
+                "alt": "Админка: недельное расписание мастера",
+                "w": 720,
+                "h": 1482
+          },
+          {
+                "src": "images/templates/booking-bot/16.webp",
+                "alt": "Админка: рассылка, предпросмотр и подтверждение",
+                "w": 720,
+                "h": 962
+          },
+          {
+                "src": "images/templates/booking-bot/17.webp",
+                "alt": "Админка: статистика за неделю и месяц",
+                "w": 720,
+                "h": 1160
+          },
+          {
+                "src": "images/templates/booking-bot/18.webp",
+                "alt": "Мастер: утренняя сводка записей на день",
+                "w": 720,
+                "h": 600
+          }
+    ],
     price: null,
     days: null,
     demo: null
@@ -111,8 +220,111 @@ export const TEMPLATES = [
       "карточка заявки у менеджера",
       "воронка"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/quiz-bot/01.webp",
+                "alt": "Приветствие",
+                "w": 720,
+                "h": 1175
+          },
+          {
+                "src": "images/templates/quiz-bot/02.webp",
+                "alt": "Первый вопрос",
+                "w": 720,
+                "h": 818
+          },
+          {
+                "src": "images/templates/quiz-bot/03.webp",
+                "alt": "Ветвление",
+                "w": 720,
+                "h": 758
+          },
+          {
+                "src": "images/templates/quiz-bot/04.webp",
+                "alt": "Несколько вариантов",
+                "w": 720,
+                "h": 1206
+          },
+          {
+                "src": "images/templates/quiz-bot/05.webp",
+                "alt": "Фото (необязательно)",
+                "w": 720,
+                "h": 818
+          },
+          {
+                "src": "images/templates/quiz-bot/06.webp",
+                "alt": "Телефон",
+                "w": 720,
+                "h": 934
+          },
+          {
+                "src": "images/templates/quiz-bot/07.webp",
+                "alt": "Благодарность и подарок",
+                "w": 720,
+                "h": 760
+          },
+          {
+                "src": "images/templates/quiz-bot/08.webp",
+                "alt": "Новая заявка",
+                "w": 720,
+                "h": 1715
+          },
+          {
+                "src": "images/templates/quiz-bot/09.webp",
+                "alt": "В работе",
+                "w": 720,
+                "h": 1287
+          },
+          {
+                "src": "images/templates/quiz-bot/10.webp",
+                "alt": "Успех",
+                "w": 720,
+                "h": 1287
+          },
+          {
+                "src": "images/templates/quiz-bot/11.webp",
+                "alt": "Админка",
+                "w": 720,
+                "h": 983
+          },
+          {
+                "src": "images/templates/quiz-bot/12.webp",
+                "alt": "Воронка за 7 дней",
+                "w": 720,
+                "h": 1179
+          },
+          {
+                "src": "images/templates/quiz-bot/13.webp",
+                "alt": "Воронка за 30 дней",
+                "w": 720,
+                "h": 1219
+          },
+          {
+                "src": "images/templates/quiz-bot/14.webp",
+                "alt": "Последние заявки",
+                "w": 720,
+                "h": 1260
+          },
+          {
+                "src": "images/templates/quiz-bot/15.webp",
+                "alt": "Рассылка: предпросмотр",
+                "w": 720,
+                "h": 962
+          },
+          {
+                "src": "images/templates/quiz-bot/16.webp",
+                "alt": "Экспорт заявок",
+                "w": 720,
+                "h": 758
+          },
+          {
+                "src": "images/templates/quiz-bot/17.webp",
+                "alt": "Напоминание",
+                "w": 720,
+                "h": 1016
+          }
+    ],
     price: null,
     days: null,
     demo: null
@@ -275,8 +487,87 @@ export const TEMPLATES = [
       "админка",
       "статистика"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/paywall-bot/01.webp",
+                "alt": "Покупка за Telegram Stars, часть 1 из 2",
+                "w": 720,
+                "h": 1669
+          },
+          {
+                "src": "images/templates/paywall-bot/02.webp",
+                "alt": "Покупка за Telegram Stars, часть 2 из 2",
+                "w": 720,
+                "h": 1719
+          },
+          {
+                "src": "images/templates/paywall-bot/03.webp",
+                "alt": "Демо: 10 минут бесплатно, часть 1 из 2",
+                "w": 720,
+                "h": 1881
+          },
+          {
+                "src": "images/templates/paywall-bot/04.webp",
+                "alt": "Демо: 10 минут бесплатно, часть 2 из 2",
+                "w": 720,
+                "h": 677
+          },
+          {
+                "src": "images/templates/paywall-bot/05.webp",
+                "alt": "Заявка без подписки",
+                "w": 720,
+                "h": 1454
+          },
+          {
+                "src": "images/templates/paywall-bot/06.webp",
+                "alt": "Ручная оплата: чек и подтверждение, часть 1 из 2",
+                "w": 720,
+                "h": 1881
+          },
+          {
+                "src": "images/templates/paywall-bot/07.webp",
+                "alt": "Ручная оплата: чек и подтверждение, часть 2 из 2",
+                "w": 720,
+                "h": 1861
+          },
+          {
+                "src": "images/templates/paywall-bot/08.webp",
+                "alt": "Ручная оплата: чек и подтверждение",
+                "w": 720,
+                "h": 825
+          },
+          {
+                "src": "images/templates/paywall-bot/09.webp",
+                "alt": "Админка, часть 1 из 5",
+                "w": 720,
+                "h": 1696
+          },
+          {
+                "src": "images/templates/paywall-bot/10.webp",
+                "alt": "Админка, часть 2 из 5",
+                "w": 720,
+                "h": 1230
+          },
+          {
+                "src": "images/templates/paywall-bot/11.webp",
+                "alt": "Админка, часть 3 из 5",
+                "w": 720,
+                "h": 1783
+          },
+          {
+                "src": "images/templates/paywall-bot/12.webp",
+                "alt": "Админка, часть 4 из 5",
+                "w": 720,
+                "h": 1815
+          },
+          {
+                "src": "images/templates/paywall-bot/13.webp",
+                "alt": "Админка, часть 5 из 5",
+                "w": 720,
+                "h": 671
+          }
+    ],
     price: null,
     days: null,
     demo: null
@@ -327,8 +618,117 @@ export const TEMPLATES = [
       "очередь",
       "план на день"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/autopost-bot/01.webp",
+                "alt": "Первое открытие",
+                "w": 720,
+                "h": 845
+          },
+          {
+                "src": "images/templates/autopost-bot/02.webp",
+                "alt": "Главное меню",
+                "w": 720,
+                "h": 976
+          },
+          {
+                "src": "images/templates/autopost-bot/03.webp",
+                "alt": "Новый пост",
+                "w": 720,
+                "h": 567
+          },
+          {
+                "src": "images/templates/autopost-bot/04.webp",
+                "alt": "Предпросмотр и настройки",
+                "w": 720,
+                "h": 1340
+          },
+          {
+                "src": "images/templates/autopost-bot/05.webp",
+                "alt": "Кнопки добавлены",
+                "w": 720,
+                "h": 1418
+          },
+          {
+                "src": "images/templates/autopost-bot/06.webp",
+                "alt": "Выбор каналов",
+                "w": 720,
+                "h": 554
+          },
+          {
+                "src": "images/templates/autopost-bot/07.webp",
+                "alt": "Когда опубликовать",
+                "w": 720,
+                "h": 634
+          },
+          {
+                "src": "images/templates/autopost-bot/08.webp",
+                "alt": "Календарь",
+                "w": 720,
+                "h": 945
+          },
+          {
+                "src": "images/templates/autopost-bot/09.webp",
+                "alt": "Готово",
+                "w": 720,
+                "h": 634
+          },
+          {
+                "src": "images/templates/autopost-bot/10.webp",
+                "alt": "Очередь",
+                "w": 720,
+                "h": 472
+          },
+          {
+                "src": "images/templates/autopost-bot/11.webp",
+                "alt": "Посты дня",
+                "w": 720,
+                "h": 832
+          },
+          {
+                "src": "images/templates/autopost-bot/12.webp",
+                "alt": "Карточка поста",
+                "w": 720,
+                "h": 1458
+          },
+          {
+                "src": "images/templates/autopost-bot/13.webp",
+                "alt": "Потеря прав",
+                "w": 720,
+                "h": 732
+          },
+          {
+                "src": "images/templates/autopost-bot/14.webp",
+                "alt": "Опоздание после простоя",
+                "w": 720,
+                "h": 603
+          },
+          {
+                "src": "images/templates/autopost-bot/15.webp",
+                "alt": "Карточка канала",
+                "w": 720,
+                "h": 718
+          },
+          {
+                "src": "images/templates/autopost-bot/16.webp",
+                "alt": "Расписание слотов",
+                "w": 720,
+                "h": 655
+          },
+          {
+                "src": "images/templates/autopost-bot/17.webp",
+                "alt": "История",
+                "w": 720,
+                "h": 1125
+          },
+          {
+                "src": "images/templates/autopost-bot/18.webp",
+                "alt": "Настройки",
+                "w": 720,
+                "h": 898
+          }
+    ],
     price: null,
     days: null,
     demo: null
@@ -380,8 +780,81 @@ export const TEMPLATES = [
       "карточка клиента",
       "статистика"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/support-bot/01.webp",
+                "alt": "Клиент: /start",
+                "w": 720,
+                "h": 1208
+          },
+          {
+                "src": "images/templates/support-bot/02.webp",
+                "alt": "Клиент: ответ из FAQ (приходит сразу)",
+                "w": 720,
+                "h": 668
+          },
+          {
+                "src": "images/templates/support-bot/03.webp",
+                "alt": "Клиент: выбор темы (необязательно)",
+                "w": 720,
+                "h": 774
+          },
+          {
+                "src": "images/templates/support-bot/04.webp",
+                "alt": "Клиент пишет: текст, фото, автоответ с номером",
+                "w": 720,
+                "h": 1184
+          },
+          {
+                "src": "images/templates/support-bot/05.webp",
+                "alt": "Клиент: закрытие и оценка 1-5",
+                "w": 720,
+                "h": 600
+          },
+          {
+                "src": "images/templates/support-bot/06.webp",
+                "alt": "Клиент: вне рабочих часов и переоткрытие",
+                "w": 720,
+                "h": 844
+          },
+          {
+                "src": "images/templates/support-bot/07.webp",
+                "alt": "Демо: «Посмотреть как оператор» - карточка и сообщения клиента",
+                "w": 720,
+                "h": 1784
+          },
+          {
+                "src": "images/templates/support-bot/08.webp",
+                "alt": "Демо: «Взять», ответ клиенту и заметка «//»",
+                "w": 720,
+                "h": 2044
+          },
+          {
+                "src": "images/templates/support-bot/09.webp",
+                "alt": "Демо: закрытие обращения и /stats",
+                "w": 720,
+                "h": 1936
+          },
+          {
+                "src": "images/templates/support-bot/10.webp",
+                "alt": "Боевой режим: тема в рабочей группе (карточка, ответ, заметка)",
+                "w": 720,
+                "h": 2572
+          },
+          {
+                "src": "images/templates/support-bot/11.webp",
+                "alt": "Боевой режим: что видит клиент (без пометки «демо»)",
+                "w": 720,
+                "h": 884
+          },
+          {
+                "src": "images/templates/support-bot/12.webp",
+                "alt": "Боевой режим: служебные сообщения в теме",
+                "w": 720,
+                "h": 1196
+          }
+    ],
     price: null,
     days: null,
     demo: null
@@ -790,8 +1263,69 @@ export const TEMPLATES = [
       "список поисков",
       "избранное"
     ],
-    shotKind: "",
-    shots: [],
+    shotKind: "chat",
+    shots: [
+          {
+                "src": "images/templates/avito-parser/01.webp",
+                "alt": "Запуск и главное меню",
+                "w": 720,
+                "h": 1198
+          },
+          {
+                "src": "images/templates/avito-parser/02.webp",
+                "alt": "Добавление поиска",
+                "w": 720,
+                "h": 1814
+          },
+          {
+                "src": "images/templates/avito-parser/03.webp",
+                "alt": "Уведомление о новом объявлении",
+                "w": 720,
+                "h": 2061
+          },
+          {
+                "src": "images/templates/avito-parser/04.webp",
+                "alt": "Список поисков",
+                "w": 720,
+                "h": 1709
+          },
+          {
+                "src": "images/templates/avito-parser/05.webp",
+                "alt": "Фильтр по цене",
+                "w": 720,
+                "h": 3197
+          },
+          {
+                "src": "images/templates/avito-parser/06.webp",
+                "alt": "Избранное и экспорт в CSV",
+                "w": 720,
+                "h": 1101
+          },
+          {
+                "src": "images/templates/avito-parser/07.webp",
+                "alt": "Тихие часы",
+                "w": 720,
+                "h": 2911
+          },
+          {
+                "src": "images/templates/avito-parser/08.webp",
+                "alt": "Админка",
+                "w": 720,
+                "h": 2635
+          },
+          {
+                "src": "images/templates/avito-parser/09.webp",
+                "alt": "Авито ограничил доступ: поиски на паузе",
+                "w": 720,
+                "h": 1298
+          },
+          {
+                "src": "images/templates/avito-parser/10.webp",
+                "alt": "Ошибки в ссылке на поиск",
+                "w": 720,
+                "h": 1809
+          }
+    ],
     price: null,
     days: null,
     demo: null

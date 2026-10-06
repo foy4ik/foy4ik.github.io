@@ -59,7 +59,7 @@ let io = null;
 const stopReveals = () => { if (io) { io.disconnect(); io = null; } };
 function revealOnScroll(sc) {
   stopReveals();
-  const nodes = $$('.feats li, .case-tech li, .shot, .case-text, .case-next, .needs li, .phone-fig, .tb-fig, .tpl-price-row, .case-links', sc);
+  const nodes = $$('.feats li, .case-tech li, .shot, .case-text, .case-next, .needs li, .phone-fig, .tb-fig, .chat-fig, .tpl-price-row, .case-links', sc);
   gsap.set(nodes, { y: 46, opacity: 0 });
   io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {

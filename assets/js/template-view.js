@@ -16,6 +16,14 @@ function stage(t) {
       <div class="phone ps-r" data-par="-0.8"><div class="pv" data-pan>${img(c)}</div></div>
     </div>`;
   }
+  if (t.shotKind === 'chat' && shots.length) {
+    const [a, b, c] = [shots[0], shots[1] || shots[0], shots[2] || shots[1] || shots[0]];
+    return `<div class="tpl-stage tpl-chats-stage">
+      <div class="chat-card cs-l" data-par="-0.5">${img(b)}</div>
+      <div class="chat-card cs-c" data-par="0.35">${img(a)}</div>
+      <div class="chat-card cs-r" data-par="-0.8">${img(c)}</div>
+    </div>`;
+  }
   if (t.shotKind === 'browser' && shots.length) {
     return `<div class="tpl-stage tpl-browser-stage"><div class="tb"><div class="bar"><i></i><i></i><i></i></div><div class="tbv" data-pan>${img(shots[0])}</div></div></div>`;
   }
@@ -32,6 +40,11 @@ function screens(t, no) {
     return `<section class="case-block"><p class="eyebrow">${no} / Экраны</p><h3 class="t">Интерфейс</h3>
       <div class="tpl-phones" style="margin-top:30px">${shots.map((s) => `<figure class="phone-fig"><div class="phone"><div class="pv" data-pan>${img(s, ' loading="lazy"')}</div></div><figcaption>${esc(s.alt)}</figcaption></figure>`).join('')}</div>
       <p class="tpl-note">Скриншоты демо-версии шаблона</p></section>`;
+  }
+  if (t.shotKind === 'chat' && shots.length) {
+    return `<section class="case-block"><p class="eyebrow">${no} / Экраны</p><h3 class="t">Интерфейс</h3>
+      <div class="tpl-chats" style="margin-top:30px">${shots.map((s) => `<figure class="chat-fig">${img(s, ' loading="lazy"')}<figcaption>${esc(s.alt)}</figcaption></figure>`).join('')}</div>
+      <p class="tpl-note">Макеты чата демо-версии шаблона</p></section>`;
   }
   if (t.shotKind === 'browser' && shots.length) {
     return `<section class="case-block"><p class="eyebrow">${no} / Экраны</p><h3 class="t">Интерфейс</h3>

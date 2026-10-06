@@ -458,6 +458,20 @@ h2.title{font-family:var(--font-display); font-weight:700; font-size:clamp(32px,
   .tts-chips li:nth-child(1){left:6%; top:16%;} .tts-chips li:nth-child(2){right:6%; top:24%; animation-delay:-2s;}
   .tts-chips li:nth-child(3){left:9%; bottom:16%; animation-delay:-4s;} .tts-chips li:nth-child(4){right:8%; bottom:14%; animation-delay:-1s;}
 }
+/* chat mockups (Telegram bots) */
+.chat-card{border-radius:22px; overflow:hidden; border:1px solid var(--border); background:#0E1621; box-shadow:0 40px 70px -40px #000;}
+.chat-card img,.chat-fig img{width:100%; height:auto; display:block;}
+.tpl-chats-stage{--cw:clamp(190px,25vw,330px); height:calc(var(--cw)*1.75); overflow:hidden; -webkit-mask-image:linear-gradient(#000 70%,transparent); mask-image:linear-gradient(#000 70%,transparent);}
+.tpl-chats-stage .chat-card{position:absolute; top:6%; width:var(--cw);}
+.cs-c{left:calc(50% - var(--cw)/2); z-index:2;}
+.tpl-chats-stage .cs-l{left:calc(50% - var(--cw)*1.38); top:16%; rotate:-5deg; opacity:.9;}
+.tpl-chats-stage .cs-r{left:calc(50% + var(--cw)*.38); top:18%; rotate:5deg; opacity:.9;}
+.tpl-chats{columns:2; column-gap:16px;}
+@media (min-width:700px){ .tpl-chats{columns:3; column-gap:24px;} }
+@media (min-width:1100px){ .tpl-chats{columns:4;} }
+.chat-fig{break-inside:avoid; margin:0 0 30px;}
+.chat-fig img{border-radius:20px; border:1px solid var(--border); background:#0E1621;}
+.chat-fig figcaption{margin-top:12px; font:500 12px var(--mono); letter-spacing:.08em; color:var(--muted); text-align:center;}
 .tpl-price-row{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 18px; margin-bottom:28px;}
 .tpl-price-row b{font-family:var(--font-display); font-weight:700; font-size:clamp(28px,3.4vw,44px); letter-spacing:-.03em; line-height:1.1;}
 .tpl-price-row span{font:500 13px var(--mono); letter-spacing:.06em; color:var(--muted);}
