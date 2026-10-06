@@ -1,9 +1,7 @@
 /* Ready-made templates shown in the "Шаблоны" section.
    Texts come from "Тексты шаблонов для портфолио.md". Nothing here is invented.
-   To publish a price or a demo link, fill the fields of a template and push:
-     price: 4900           - number in rubles, shows "от 4 900 ₽" (empty: "Цена - по запросу")
-     days:  3              - installation time, shows "установка от 3 дней"
-     demo:  "https://..."  - link to the live demo, shows the "Открыть демо" button
+   Price, installation term, demo link and visibility are NOT edited here: they live in the site data
+   (state-data in index.html, key "templates") and are changed in admin.html, tab "Шаблоны".
    Screenshots are in images/templates/<id>/. */
 export const TEMPLATES = [
   {
@@ -1385,5 +1383,20 @@ export const TEMPLATES = [
     demo: null
   }
 ];
+
+/* Apply what the admin saved: { "<id>": { price, days, demo, hidden } }. Hidden templates are removed from the list in place. */
+export function applyOverrides(map) {
+  const o = map && typeof map === 'object' && !Array.isArray(map) ? map : {};
+  for (const t of TEMPLATES) {
+    const e = o[t.id] || {};
+    const price = Number(e.price);
+    const days = Number(e.days);
+    t.price = price > 0 ? Math.round(price) : null;
+    t.days = days > 0 ? Math.round(days) : null;
+    t.demo = typeof e.demo === 'string' && /^https?:\/\//i.test(e.demo.trim()) ? e.demo.trim() : null;
+    t.hidden = e.hidden === true;
+  }
+  for (let i = TEMPLATES.length - 1; i >= 0; i--) if (TEMPLATES[i].hidden) TEMPLATES.splice(i, 1);
+}
 
 export const templateById = (id) => TEMPLATES.find((t) => t.id === id);

@@ -71,6 +71,12 @@
   .icon-btn{width:30px; height:30px; border-radius:7px; border:1px solid var(--border); background:var(--bg-elevated); color:var(--text-dim); display:flex; align-items:center; justify-content:center; font-size:13px;}
   .icon-btn:hover{color:var(--accent); border-color:var(--accent);}
   .icon-btn.danger:hover{color:var(--danger); border-color:var(--danger);}
+  .tcard{border:1px solid var(--border); border-radius:12px; padding:14px 16px 4px; margin-bottom:12px; background:var(--surface);}
+  .tcard-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
+  .tcard-head b{font-size:14px;} .tcard-head b small{display:block; font-weight:400; font-size:12px; color:var(--text-dim);}
+  .tcard-head .check{margin:0; white-space:nowrap;}
+  .tcard.off{opacity:.6;}
+  .tcard .field-row .field{min-width:140px;}
   #project-form{margin-top:20px; border-top:1px solid var(--border); padding-top:20px;}
 
   .bar{position:fixed; left:0; right:0; bottom:0; background:var(--bg-elevated); border-top:1px solid var(--border); padding:14px 20px; z-index:10;}
@@ -118,6 +124,7 @@
     <div class="tabs">
       <button class="tab active" data-tab="projects">Проекты</button>
       <button class="tab" data-tab="services">Услуги</button>
+      <button class="tab" data-tab="templates">Шаблоны</button>
       <button class="tab" data-tab="reviews">Отзывы</button>
       <button class="tab" data-tab="profile">Профиль</button>
     </div>
@@ -174,6 +181,11 @@
           <button type="button" class="btn btn-ghost btn-sm" id="sv-cancel">Отмена</button>
         </div>
       </form>
+    </div>
+
+    <div id="tab-templates" hidden>
+      <p class="hint" style="margin-top:0;">Тексты и скриншоты шаблонов лежат в коде сайта, а здесь меняется то, что бывает разным: цена, срок, ссылка на демо и видимость. Пока цена не указана, на сайте написано «Цена - по запросу».</p>
+      <div id="template-list"></div>
     </div>
 
     <div id="tab-reviews" hidden>
@@ -299,9 +311,10 @@
     state.projects = state.projects || [];
     state.services = Array.isArray(state.services) ? state.services : [];
     state.reviews = Array.isArray(state.reviews) ? state.reviews : [];
+    state.templates = state.templates && typeof state.templates === 'object' && !Array.isArray(state.templates) ? state.templates : {};
     setDirty(false);
     $('login-view').hidden = true; $('panel-view').hidden = false; $('bar').hidden = false; $('logout').hidden = false;
-    renderList(); renderServiceList(); renderReviewList(); fillProfile(); setStatus('');
+    renderList(); renderServiceList(); renderReviewList(); renderTemplates(); fillProfile(); setStatus('');
   }
   $('login-form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -338,7 +351,7 @@
   document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    ['projects', 'services', 'reviews', 'profile'].forEach(n => { $('tab-' + n).hidden = tab.dataset.tab !== n; });
+    ['projects', 'services', 'templates', 'reviews', 'profile'].forEach(n => { $('tab-' + n).hidden = tab.dataset.tab !== n; });
     if(tab.dataset.tab === 'services') renderServiceList();
   }));
 
@@ -481,6 +494,41 @@
     setDirty(true); closeServiceForm(); renderServiceList();
   });
 
+  /* ---------- templates (price, term, demo link, visibility) ---------- */
+  let TPL = null;
+  async function renderTemplates(){
+    const box = $('template-list');
+    try{
+      if(!TPL) TPL = (await import('./assets/js/templates-data.js')).TEMPLATES;
+    }catch(e){ box.innerHTML = '<p style="color:var(--text-dim); font-size:14px;">Не удалось загрузить список шаблонов. Откройте админку по адресу сайта (https://foy4ik.github.io/admin.html), а не как файл.</p>'; return; }
+    const o = state.templates;
+    box.innerHTML = TPL.map((t, i) => {
+      const e = o[t.id] || {};
+      return `<div class="tcard${e.hidden ? ' off' : ''}" data-id="${esc(t.id)}">
+        <div class="tcard-head"><b>${String(i + 1).padStart(2, '0')} ${esc(t.title)}<small>${esc(t.badge || '')}</small></b>
+          <label class="check"><input type="checkbox" data-f="visible" ${e.hidden ? '' : 'checked'}> Показывать на сайте</label></div>
+        <div class="field-row">
+          <div class="field"><label>Цена, ₽ (от)</label><input type="number" min="0" step="100" inputmode="numeric" data-f="price" value="${esc(e.price || '')}" placeholder="например 4900"></div>
+          <div class="field"><label>Установка, дней (от)</label><input type="number" min="1" step="1" inputmode="numeric" data-f="days" value="${esc(e.days || '')}" placeholder="например 3"></div>
+        </div>
+        <div class="field"><label>Ссылка на демо (появится кнопка «Открыть демо»)</label><input type="url" data-f="demo" value="${esc(e.demo || '')}" placeholder="https://"></div>
+      </div>`;
+    }).join('');
+  }
+  $('template-list').addEventListener('input', e => {
+    const f = e.target.dataset.f; if(!f) return;
+    const card = e.target.closest('.tcard'); const id = card.dataset.id;
+    const q = n => card.querySelector('[data-f="' + n + '"]');
+    const entry = {};
+    const price = Math.round(Number(q('price').value)); if(price > 0) entry.price = price;
+    const days = Math.round(Number(q('days').value)); if(days > 0) entry.days = days;
+    const demo = q('demo').value.trim(); if(demo) entry.demo = demo;
+    if(!q('visible').checked) entry.hidden = true;
+    if(Object.keys(entry).length) state.templates[id] = entry; else delete state.templates[id];
+    card.classList.toggle('off', !q('visible').checked);
+    setDirty(true);
+  });
+
   /* ---------- reviews ---------- */
   const rForm = $('review-form'), rAdd = $('add-review-btn');
   function renderReviewList(){
@@ -564,6 +612,8 @@
   $('publish-btn').addEventListener('click', async () => {
     if(!form.hidden || !sForm.hidden || !rForm.hidden){ setStatus('Сначала сохраните или отмените открытую форму.', 'err'); return; }
     applyProfile();
+    const badDemo = Object.entries(state.templates).find(([, v]) => v.demo && !/^https?:\/\//i.test(v.demo));
+    if(badDemo){ setStatus('Ссылка на демо должна начинаться с https:// (шаблон ' + badDemo[0] + ').', 'err'); return; }
     const btn = $('publish-btn'); btn.disabled = true; setStatus('Публикую…');
     try{
       const latest = await readSite();

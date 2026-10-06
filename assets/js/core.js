@@ -16,13 +16,14 @@ export const motionOK = () => !mq.reduce.matches;
 
 /* Data lives in the page as JSON; the admin page rewrites exactly this block. */
 function loadState() {
-  const empty = { profile: {}, projects: [], services: [], reviews: [] };
+  const empty = { profile: {}, projects: [], services: [], reviews: [], templates: {} };
   try {
     const d = JSON.parse(document.getElementById('state-data').textContent);
     d.profile = d.profile || {};
     d.projects = Array.isArray(d.projects) ? d.projects.filter((p) => p && p.title) : [];
     d.services = Array.isArray(d.services) ? d.services.filter((s) => s && s.title) : [];
     d.reviews = Array.isArray(d.reviews) ? d.reviews.filter((r) => r && r.text) : [];
+    d.templates = d.templates && typeof d.templates === 'object' && !Array.isArray(d.templates) ? d.templates : {};
     return d;
   } catch (e) {
     console.warn('state-data is not valid JSON', e);

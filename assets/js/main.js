@@ -1,5 +1,6 @@
 /* Entry point: render everything from data first, then wire up motion. */
-import { app } from './core.js';
+import { app, state } from './core.js';
+import { applyOverrides } from './templates-data.js';
 import { initScroll, initReveals } from './scroll.js';
 import * as nav from './nav.js';
 import * as hero from './hero.js';
@@ -15,6 +16,7 @@ import * as egg from './egg.js';
 import * as caseView from './case.js';
 
 async function boot() {
+  applyOverrides(state.templates); /* prices, demo links and hidden templates come from the admin */
   /* static content from data (works without any animation library) */
   nav.render(); hero.render(); services.render(); templates.render(); about.render(); process.render(); reviews.render(); contact.render(); caseView.render();
   await projects.render();
